@@ -1,0 +1,33 @@
+# Ignorar dependencias de cada subproyecto
+**/node_modules/
+
+# Ignorar archivos de compilación de TypeScript
+**/dist/
+**/build/
+**/*.js
+**/*.js.map
+**/*.d.ts
+
+# Ignorar archivos específicos de Vue
+**/.vite/
+**/vite.config.ts
+**/.nuxt/
+**/.output/
+
+# Ignorar configuraciones y cachés
+**/.eslintcache
+**/.turbo/
+**/.idea/
+**/.vscode/
+**/.DS_Store
+**/coverage/
+
+# Ignorar entornos y configuraciones sensibles
+**/.env
+**/.env.*
+
+# Ignorar logs
+**/npm-debug.log
+**/yarn-error.log
+**/pnpm-debug.log
+**/lerna-debug.log

@@ -1,0 +1,28 @@
+
+{
+    "rabbit_version": "3.8.9",
+    "users": [{
+      "name": "guest",
+      "password": "guest",
+      "tags": "administrator"
+    }],
+    "vhosts": [{"name": "/"}],
+    "permissions": [{
+      "user": "guest",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }],
+    "queues": [
+      { "name": "order_requests", "vhost": "/", "durable": true },
+      { "name": "order_status_updates", "vhost": "/", "durable": true }
+    ],
+    "exchanges": [
+      { "name": "order_events", "vhost": "/", "type": "fanout", "durable": true }
+    ],
+    "bindings": [
+      { "source": "order_events", "vhost": "/", "destination": "order_status_updates", "destination_type": "queue", "routing_key": "" }
+    ]
+  }
+  

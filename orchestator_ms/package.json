@@ -4,23 +4,25 @@
   "description": "",
   "main": "main.ts",
   "scripts": {
-    "dev": "ts-node main.ts",
+    "dev": "ts-node src/main.ts",
     "build": "tsc",
     "start": "node dist/main.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.6.2",
+  "packageManager": "yarn@1.22.19",
   "devDependencies": {
-    "@types/node": "^22.13.10",
+    "@types/amqplib": "^0.10.7",
+    "@types/node": "^22.13.11",
     "@types/pg": "^8.11.11",
-    "dotenv": "^16.4.7",
     "nodemon": "^3.1.9",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.2"
   },
   "dependencies": {
+    "amqplib": "^0.10.5",
+    "dotenv": "^16.4.7",
     "orchestator_ms": "file:",
     "pg": "^8.14.1"
   }

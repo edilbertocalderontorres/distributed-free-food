@@ -24,7 +24,7 @@ const server = createServer((req: IncomingMessage, res: ServerResponse) => {
   
 });
 
-const PORT = 3000;
+const PORT = 8080;
 
 server.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);

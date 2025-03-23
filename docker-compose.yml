@@ -28,6 +28,7 @@ services:
       - RABBITMQ_URL=amqp://rabbitmq
       - QUEUE_ESTADO_ORDEN=estado.orden.qu
       - EXCHANGE_NUEVA_ORDEN=nueva.orden.ex
+      - ROUTING_KEY_NUEVA_ORDEN=nueva_orden
     depends_on:
       - rabbitmq
       - postgres

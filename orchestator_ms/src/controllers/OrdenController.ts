@@ -2,14 +2,15 @@
 
 import { Post } from "../utils/httputils/routing/RouteDecorators";
 import { IncomingMessage, ServerResponse } from "http";
-import { registrar } from '../services/OrdenService';
+import { manejarOrden } from '../services/OrdenService';
 import { Beneficiario, Orden, EstadoOrden } from '../models/models';
+import { CustomError } from "../exception/CustomError";
 export class OrdenController {
 
     constructor() { }
 
     @Post("/orden")
-    public manejarOrden(req: IncomingMessage, res: ServerResponse): void {
+    public async manejarOrden(req: IncomingMessage, res: ServerResponse): Promise<void> {
         let body = "";
 
         req.on("data", (chunk) => {
@@ -20,31 +21,50 @@ export class OrdenController {
         let orden: Orden;
 
 
-        req.on("end", () => {
+        req.on("end", async () => {
             try {
                 container = JSON.parse(body);
 
-                console.log(container)
+
                 orden = {
                     id: "",
                     beneficiarioId: container.beneficiario.tipoDocumento.concat(container.beneficiario.numDocumento),
-                    platoId: null,
+                    recetaId: null,
                     estado: "PENDIENTE" as EstadoOrden,
                     fechaCreacion: new Date(),
                     fechaActualizacion: new Date()
                 };
-                registrar(orden)
-                    .then((orden) => {
+                const resultado = await manejarOrden(orden);
 
-                        res.writeHead(200, { "Content-Type": "application/json" });
-                        res.end(JSON.stringify(orden));
-                    }).catch((error) => {
-                        res.writeHead(200, { "Content-Type": "application/json" });
-                        res.end(JSON.stringify(error));
-                    });
+                if (resultado) {
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ mensaje: "Orden creada exitosamente" }));
+
+                }
+
+
 
             } catch (error) {
-                console.log(error)
+                let mensaje = "Error interno del servidor";
+                let codigoHttp: number;
+
+                if (error instanceof CustomError) {
+
+                    mensaje = error.message;
+                    codigoHttp = error.statusCode || 500;
+                } else {
+
+                    mensaje = "Error interno del servidor";
+                    codigoHttp = 500;
+                }
+                res.writeHead(codigoHttp, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ mensaje: mensaje }));
+
+
+
+
+
+
 
             }
 

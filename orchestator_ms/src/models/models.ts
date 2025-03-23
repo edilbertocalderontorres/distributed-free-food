@@ -38,8 +38,8 @@ export type EstadoOrden = "PENDIENTE" | "EN PREPARACION" | "FINALIZADA";
 
 export interface Orden {
   id: UUID;
-  beneficiarioId: string | null;
-  platoId: UUID | null;
+  beneficiarioId: string;
+  recetaId: UUID | null;
   estado: EstadoOrden;
   fechaCreacion: Date;
   fechaActualizacion: Date;

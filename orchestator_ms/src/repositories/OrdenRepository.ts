@@ -10,13 +10,23 @@ export class OrdenRepository extends BaseRepository<Orden> {
   }
 
   async create(data: Orden): Promise<Orden> {
-    const keys = Object.keys(data);
-    const values = Object.values(data);
+    const values = [
+      data.beneficiarioId,
+      data.recetaId,
+      data.estado,
+    ];
     const result = await query(
-      `INSERT INTO ${this.tabla} (${keys.join(",")}) VALUES (${keys.map((_, i) => `$${i + 1}`).join(",")}) RETURNING *`,
+      `INSERT INTO public.orden (beneficiarioid, recetaid, estado, fechacreacion, fechaactualizacion)
+    VALUES ($1, $2, $3, NOW(), NOW())
+    RETURNING *`,
       values
     );
     return result.rows[0] as Orden;
+  }
+
+  async getByBeneficiarioId(beneficiarioId: string): Promise<Orden | null> {
+    const result = await query(`SELECT * FROM public.${this.tabla} WHERE beneficiarioId = $1 ORDER BY fechaActualizacion DESC limit 1`, [beneficiarioId]);
+    return result.rows[0] as Orden || null;
   }
     
 }

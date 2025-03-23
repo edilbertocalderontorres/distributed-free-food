@@ -20,14 +20,14 @@ services:
       - "8080:8080"
     container_name: orchestator_ms
     environment:
-      - PG_USER='app_user'
-      - PG_PASSWORD='app_password'
-      - PG_HOST='postgres'
-      - PG_PORT='5432'
-      - PG_DATABASE='almuerzos_db'
+      - PG_USER=app_user
+      - PG_PASSWORD=app_password
+      - PG_HOST=postgres_db
+      - PG_PORT=5432
+      - PG_DATABASE=almuerzos_db
       - RABBITMQ_URL=amqp://rabbitmq
-      - QUEUE_ESTADO_ORDEN='estado.orden.qu'
-      - EXCHANGE_NUEVA_ORDEN='nueva.orden.ex'
+      - QUEUE_ESTADO_ORDEN=estado.orden.qu
+      - EXCHANGE_NUEVA_ORDEN=nueva.orden.ex
     depends_on:
       - rabbitmq
       - postgres

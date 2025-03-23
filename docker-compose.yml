@@ -26,8 +26,8 @@ services:
       - PG_PORT='5432'
       - PG_DATABASE='almuerzos_db'
       - RABBITMQ_URL=amqp://rabbitmq
-      - QUEUE_ESTADO_ORDEN='nueva_orden_qu'
-      - EXCHANGE_NUEVA_ORDEN='nueva_orden_ex'
+      - QUEUE_ESTADO_ORDEN='estado.orden.qu'
+      - EXCHANGE_NUEVA_ORDEN='nueva.orden.ex'
     depends_on:
       - rabbitmq
       - postgres
@@ -78,7 +78,7 @@ services:
       - "5672:5672"
       - "15672:15672"
     volumes:
-      - ./data:/var/lib/rabbitmq:rw
+      #- ./data:/var/lib/rabbitmq:rw
       - ./definitions.json:/etc/rabbitmq/definitions.json:ro 
       - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro  
     environment:

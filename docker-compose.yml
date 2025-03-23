@@ -1,5 +1,32 @@
 
-services:
+
+x-global-env: &global-env
+  PG_USER: app_user
+  PG_PASSWORD: app_password
+  PG_HOST: postgres_db
+  PG_PORT: 5432
+  PG_DATABASE: almuerzos_db
+  RABBITMQ_URL: amqp://rabbitmq
+  
+  EXCHANGE_NUEVA_ORDEN: nueva.orden.ex
+  ROUTING_KEY_NUEVA_ORDEN: nueva_orden
+  QUEUE_NUEVA_ORDEN: nueva.orden.qu
+
+  EXCHANGE_ESTADO_ORDEN: estado.orden.ex
+  ROUTING_KEY_ESTADO_ORDEN: estado
+  QUEUE_ESTADO_ORDEN: estado.orden.qu
+
+  EXCHANGE_SOLICITUD_COMPRA: solicitud.compra.ex
+  ROUTING_KEY_SOLICITUD_COMPRA: solicitud_compra
+  QUEUE_SOLICITUD_COMPRA: solicitud.compra.qu
+
+  EXCHANGE_RESPUESTA_COMPRA: respuesta.compra.ex
+  ROUTING_KEY_RESPUESTA_COMPRA: respuesta_compra
+  QUEUE_RESPUESTA_COMPRA: respuesta.compra.qu
+
+
+
+  services:
   nginx:
     image: nginx:latest
     container_name: nginx_frontend
@@ -20,32 +47,23 @@ services:
       - "8080:8080"
     container_name: orchestator_ms
     environment:
-      - PG_USER=app_user
-      - PG_PASSWORD=app_password
-      - PG_HOST=postgres_db
-      - PG_PORT=5432
-      - PG_DATABASE=almuerzos_db
-      - RABBITMQ_URL=amqp://rabbitmq
-      - QUEUE_ESTADO_ORDEN=estado.orden.qu
-      - EXCHANGE_NUEVA_ORDEN=nueva.orden.ex
-      - ROUTING_KEY_NUEVA_ORDEN=nueva_orden
+      <<: *global-env
     depends_on:
       - rabbitmq
       - postgres
     networks:
       - app_network
 
-  #kitchen-manage:
-    #build: ./kitchen_manage_ms
-    #container_name: ms_kitchen
-    #environment:
-      #- RABBITMQ_URL=amqp://rabbitmq
-      #- DB_HOST=postgres
-    #depends_on:
-      #- rabbitmq
-      #- postgres
-    #networks:
-      #- app_network
+  kitchen-manage:
+    build: ./kitchen_manage_ms
+    container_name: ms_kitchen
+    environment:
+      <<: *global-env
+    depends_on:
+      - rabbitmq
+      - postgres
+    networks:
+      - app_network
 
   #inventory:
     #build: ./inventory_ms

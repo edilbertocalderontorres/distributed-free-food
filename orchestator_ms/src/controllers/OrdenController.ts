@@ -56,8 +56,6 @@ export class OrdenController {
                     codigoHttp = error.statusCode || 500;
                     errorCause=error.error||"";
                 } else {
-
-                    mensaje = "Error interno del servidor";
                     errorCause = "Error desconocido";
                     codigoHttp = 500;
                 }

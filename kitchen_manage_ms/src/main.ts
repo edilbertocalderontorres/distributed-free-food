@@ -5,7 +5,6 @@ import { controllers } from './config/ControllerRegistryConfig';
 const server = createServer((req: IncomingMessage, res: ServerResponse) => {
   
   
-  
   const routeLink = RouteRegistry.getRoutes().find(
     (r) => r.method === req.method && r.path === req.url
   );

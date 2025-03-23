@@ -22,24 +22,18 @@ export interface Ingrediente {
   nombre: string;
 }
 
-export interface Bodega {
+export interface ItemBodega {
   ingredienteId: UUID;
   cantidadDisponible: number;
 }
 
-export interface Plato {
-  id: UUID;
-  recetaId: UUID | null;
-  ingredienteId: UUID | null;
-  cantidad: number;
-}
 
 export type EstadoOrden = "PENDIENTE" | "EN PREPARACION" | "FINALIZADA";
 
 export interface Orden {
   id: UUID;
-  beneficiarioId: string | null;
-  platoId: UUID | null;
+  beneficiarioId: string;
+  recetaId: UUID | null;
   estado: EstadoOrden;
   fechaCreacion: Date;
   fechaActualizacion: Date;
@@ -50,4 +44,16 @@ export interface Compra {
   ingredienteId: UUID;
   cantidadComprada: number;
   fechaCompra: Date;
+}
+
+export interface SolicitudCompra {
+  ordenId: UUID;
+  ingredientes: Ingrediente[];
+}
+
+export interface RespuestaCompra {
+  ordenId: UUID;
+
+  compra: Compra;
+
 }

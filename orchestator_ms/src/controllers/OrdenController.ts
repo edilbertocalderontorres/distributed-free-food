@@ -5,6 +5,7 @@ import { IncomingMessage, ServerResponse } from "http";
 import { manejarOrden } from '../services/OrdenService';
 import { Beneficiario, Orden, EstadoOrden } from '../models/models';
 import { CustomError } from "../exception/CustomError";
+import { ErrorDto } from "./dto/ErrorDto";
 export class OrdenController {
 
     constructor() { }
@@ -47,18 +48,21 @@ export class OrdenController {
             } catch (error) {
                 let mensaje = "Error interno del servidor";
                 let codigoHttp: number;
+                let errorCause:  string;
 
                 if (error instanceof CustomError) {
 
                     mensaje = error.message;
                     codigoHttp = error.statusCode || 500;
+                    errorCause=error.error||"";
                 } else {
 
                     mensaje = "Error interno del servidor";
+                    errorCause = "Error desconocido";
                     codigoHttp = 500;
                 }
                 res.writeHead(codigoHttp, { "Content-Type": "application/json" });
-                res.end(JSON.stringify({ mensaje: mensaje }));
+                res.end(JSON.stringify(new ErrorDto( errorCause, mensaje)));
 
 
 

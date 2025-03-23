@@ -78,11 +78,13 @@ services:
       - "5672:5672"
       - "15672:15672"
     volumes:
-      - rabbitmq_config:/etc/rabbitmq/rabbitmq.conf
-      - rabbitmq_definitions:/etc/rabbitmq/definitions.json
+      - ./data:/var/lib/rabbitmq:rw
+      - ./definitions.json:/etc/rabbitmq/definitions.json:ro 
+      - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro  
     environment:
       - RABBITMQ_CONFIG_FILE=/etc/rabbitmq/rabbitmq.conf
-      - RABBITMQ_LOAD_DEFINITIONS=/etc/rabbitmq/definitions.json
+      - RABBITMQ_LOAD_DEFINITIONS=true
+      - RABBITMQ_DEFINITIONS_FILE=/etc/rabbitmq/definitions.json  
     networks:
       - app_network
 
@@ -92,5 +94,3 @@ networks:
 
 volumes:
   postgres_data:
-  rabbitmq_config:
-  rabbitmq_definitions:

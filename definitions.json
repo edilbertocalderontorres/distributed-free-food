@@ -15,14 +15,22 @@
       "read": ".*"
     }],
     "queues": [
-      { "name": "order_requests", "vhost": "/", "durable": true },
-      { "name": "order_status_updates", "vhost": "/", "durable": true }
+      { "name": "nueva.orden.qu", "vhost": "/", "durable": true },
+      { "name": "estado.orden.qu", "vhost": "/", "durable": true },
+      { "name": "solicitud.compra.qu", "vhost": "/", "durable": true },
+      { "name": "respuesta.compra.qu", "vhost": "/", "durable": true }
     ],
     "exchanges": [
-      { "name": "order_events", "vhost": "/", "type": "fanout", "durable": true }
+      { "name": "nueva.orden.ex", "vhost": "/", "type": "direct", "durable": true },
+      { "name": "estado.orden.ex", "vhost": "/", "type": "direct", "durable": true },
+      { "name": "solicitud.compra.ex", "vhost": "/", "type": "direct", "durable": true },
+      { "name": "respuesta.compra.ex", "vhost": "/", "type": "direct", "durable": true }
     ],
     "bindings": [
-      { "source": "order_events", "vhost": "/", "destination": "order_status_updates", "destination_type": "queue", "routing_key": "" }
+      { "source": "nueva.orden.ex", "vhost": "/", "destination": "nueva.orden.qu", "destination_type": "queue", "routing_key": "nueva_orden" },
+      { "source": "estado.orden.ex", "vhost": "/", "destination": "estado.orden.qu", "destination_type": "queue", "routing_key": "estado" },
+      { "source": "solicitud.compra.ex", "vhost": "/", "destination": "solicitud.compra.qu", "destination_type": "queue", "routing_key": "solicitud_compra" },
+      { "source": "respuesta.compra.ex", "vhost": "/", "destination": "respuesta.compra.qu", "destination_type": "queue", "routing_key": "respuesta_compra" }
     ]
   }
   

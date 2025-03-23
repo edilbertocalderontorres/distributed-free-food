@@ -1,0 +1,25 @@
+
+Eventos:
+
+escucha nueva orden
+
+emite solicitud compra
+
+escucha respuesta compra
+
+emite cambio estado
+
+
+logica:
+
+elige receta al azar
+valida disponibilidad de ingredientes en bodega
+si están disponibles se prepara el plato y se cambia de estado
+si no están disponibles se emite solicitud de compra y se deja la orden en preparacion
+cuando se recibe la respuesta de compra se cambia de estado y se prepara el plato
+
+al finalizar preparacion emite evento y orchestator lo escucha.
+
+
+
+

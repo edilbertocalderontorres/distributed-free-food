@@ -2,14 +2,14 @@
 
 import { Post } from "../utils/httputils/routing/RouteDecorators";
 import { IncomingMessage, ServerResponse } from "http";
-import { prepararNuevoPlato } from '../services/OrdenService';
+import { registrar } from '../services/OrdenService';
 import { Beneficiario, Orden, EstadoOrden } from '../models/models';
 export class OrdenController {
 
     constructor() { }
 
     @Post("/orden")
-    public prepararNuevoPlato(req: IncomingMessage, res: ServerResponse): void {
+    public manejarOrden(req: IncomingMessage, res: ServerResponse): void {
         let body = "";
 
         req.on("data", (chunk) => {
@@ -33,7 +33,7 @@ export class OrdenController {
                     fechaCreacion: new Date(),
                     fechaActualizacion: new Date()
                 };
-                prepararNuevoPlato(orden)
+                registrar(orden)
                     .then((orden) => {
 
                         res.writeHead(200, { "Content-Type": "application/json" });

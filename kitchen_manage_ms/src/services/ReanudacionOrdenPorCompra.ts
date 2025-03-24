@@ -40,8 +40,8 @@ export async function reanudarOrdenPorCompra(): Promise<boolean> {
 async function reanudarOrden(respuesta: RespuestaCompra): Promise<boolean> {
     const ordenRepository = new OrdenRepository();
 
-    const orden: Orden = await ordenRepository.getById(respuesta.ordenId);
+    const orden: Orden = await ordenRepository.getById(respuesta.ordenid);
     console.log(`Orden reanudada: ${orden}`);
-    return gestionar(respuesta.clientId, orden);
+    return gestionar(respuesta.clientid, orden);
 
 }

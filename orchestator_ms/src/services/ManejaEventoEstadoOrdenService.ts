@@ -19,7 +19,7 @@ export async function suscribirActualizacionEstado(): Promise<boolean> {
       if (msg) {
 
         const content: EventoEstado = JSON.parse(msg.content.toString());
-        wsManager.sendMessages(JSON.stringify(content), content.clientId);
+        wsManager.sendMessages(JSON.stringify(content), content.clientid);
     
         channel.ack(msg);
       }

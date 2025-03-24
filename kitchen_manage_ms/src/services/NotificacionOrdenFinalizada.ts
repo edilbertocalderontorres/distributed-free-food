@@ -10,7 +10,7 @@ export async function notificarEstadoOrden(clientId: string, orden: Orden, porce
     const routingKey = process.env.ROUTING_KEY_ESTADO_ORDEN || '';
 
     const message = {
-        clientId: clientId,
+        clientid: clientId,
         orden: orden,
         porcentaje: porcentaje
     } as EventoEstado;

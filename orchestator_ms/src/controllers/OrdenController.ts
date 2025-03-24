@@ -16,7 +16,7 @@ export class OrdenController {
     @Post("/orden")
     public async manejarOrden(req: IncomingMessage, res: ServerResponse): Promise<void> {
         let body = "";
-        const clientId = req.headers["x-clientid"] as string;
+        const clientid = req.headers["x-clientid"] as string;
 
         req.on("data", (chunk) => {
             body += chunk.toString();
@@ -33,13 +33,13 @@ export class OrdenController {
 
                 orden = {
                     id: "",
-                    beneficiarioId: container.beneficiario.tipoDocumento.concat(container.beneficiario.numDocumento),
-                    recetaId: null,
+                    beneficiarioid: container.beneficiario.tipodocumento.concat(container.beneficiario.numdocumento),
+                    recetaid: null,
                     estado: "PENDIENTE" as EstadoOrden,
-                    fechaCreacion: new Date(),
-                    fechaActualizacion: new Date()
+                    fechacreacion: new Date(),
+                    fechaactualizacion: new Date()
                 };
-                const resultado = await manejarOrden(clientId, orden);
+                const resultado = await manejarOrden(clientid, orden);
 
                 if (resultado) {
                     res.writeHead(200, { "Content-Type": "application/json" });

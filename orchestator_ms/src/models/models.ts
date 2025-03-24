@@ -3,8 +3,8 @@ export type UUID = string;
 export interface Beneficiario {
 
   beneficiario: {
-    tipoDocumento: string;
-    numDocumento: string;
+    tipodocumento: string;
+    numdocumento: string;
   }
 
 }
@@ -23,14 +23,14 @@ export interface Ingrediente {
 }
 
 export interface Bodega {
-  ingredienteId: UUID;
-  cantidadDisponible: number;
+  ingredienteid: UUID;
+  cantidaddisponible: number;
 }
 
 export interface Plato {
   id: UUID;
-  recetaId: UUID | null;
-  ingredienteId: UUID | null;
+  recetaid: UUID | null;
+  ingredienteid: UUID | null;
   cantidad: number;
 }
 
@@ -38,27 +38,27 @@ export type EstadoOrden = "PENDIENTE" | "EN PREPARACION" | "FINALIZADA";
 
 export interface Orden {
   id: UUID;
-  beneficiarioId: string;
-  recetaId: UUID | null;
+  beneficiarioid: string;
+  recetaid: UUID | null;
   estado: EstadoOrden;
-  fechaCreacion: Date;
-  fechaActualizacion: Date;
+  fechacreacion: Date;
+  fechaactualizacion: Date;
 }
 
 export interface Compra {
   id: UUID;
-  ingredienteId: UUID;
-  cantidadComprada: number;
-  fechaCompra: Date;
+  ingredienteid: UUID;
+  cantidadcomprada: number;
+  fechacompra: Date;
 }
 
 export interface EventoEstado {
-  clientId: string;
+  clientid: string;
   orden: Orden;
   porcentaje: number;
 }
 
 export interface EventoNuevaOrden {
   orden: Orden;
-  clientId: string;
+  clientid: string;
 }

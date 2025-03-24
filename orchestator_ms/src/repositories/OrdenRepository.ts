@@ -11,8 +11,8 @@ export class OrdenRepository extends BaseRepository<Orden> {
 
   async create(data: Orden): Promise<Orden> {
     const values = [
-      data.beneficiarioId,
-      data.recetaId,
+      data.beneficiarioid,
+      data.recetaid,
       data.estado,
     ];
     const result = await query(

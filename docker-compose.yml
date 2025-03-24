@@ -37,7 +37,7 @@ x-global-env: &global-env
       #- ./frontend:/usr/share/nginx/html:ro
     depends_on:
       - orchestator
-      #- inventory
+      - inventory-logistic
     networks:
       - app_network
 
@@ -65,15 +65,15 @@ x-global-env: &global-env
     networks:
       - app_network
 
-  #inventory:
-    #build: ./inventory_ms
-    #container_name: ms_inventory
-    #environment:
-      #- DB_HOST=postgres
-    #depends_on:
-      #- postgres
-    #networks:
-      #- app_network
+  inventory-logistic:
+    build: ./logistic_inventory_ms
+    container_name: ms_logistic_inventory
+    environment:
+      <<: *global-env
+    depends_on:
+      - postgres
+    networks:
+      - app_network
 
   postgres:
     image: postgres:latest

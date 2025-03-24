@@ -51,3 +51,14 @@ export interface Compra {
   cantidadComprada: number;
   fechaCompra: Date;
 }
+
+export interface EventoEstado {
+  clientId: string;
+  orden: Orden;
+  porcentaje: number;
+}
+
+export interface EventoNuevaOrden {
+  orden: Orden;
+  clientId: string;
+}

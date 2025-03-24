@@ -8,9 +8,9 @@ export class IngredienteRepository extends BaseRepository<Ingrediente> {
         super("ingrediente");
     }
 
-    async getById(id: string): Promise<Ingrediente | null> {
+    async getById(id: string): Promise<Ingrediente> {
         const result = await query(`SELECT * FROM public.${this.tabla} WHERE id = $1`, [id]);
-        return result.rows[0] as Ingrediente || null;
+        return result.rows[0] as Ingrediente;
     }
 
     async getAll(): Promise<Ingrediente[]> {
@@ -19,7 +19,7 @@ export class IngredienteRepository extends BaseRepository<Ingrediente> {
     }
 
     async getByRecetaId(recetaId: string): Promise<Ingrediente[]> {
-        const result = await query(`SELECT * FROM public.${this.tabla} WHERE recetaId = $1`, [recetaId]);
+        const result = await query(`SELECT * FROM public.receta_ingrediente WHERE recetaId = $1`, [recetaId]);
         return result.rows as Ingrediente[];
     }
 

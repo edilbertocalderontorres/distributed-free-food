@@ -24,7 +24,7 @@ export interface Ingrediente {
 
 export interface ItemBodega {
   ingredienteId: UUID;
-  cantidadDisponible: number;
+  cantidaddisponible: number;
 }
 
 
@@ -47,13 +47,25 @@ export interface Compra {
 }
 
 export interface SolicitudCompra {
+  clientId: string;
   ordenId: UUID;
   ingredientes: Ingrediente[];
 }
 
 export interface RespuestaCompra {
+  clientId: string;
   ordenId: UUID;
-
   compra: Compra;
 
+}
+
+export interface EventoEstado {
+  clientId: string;
+  orden: Orden;
+  porcentaje: number;
+}
+
+export interface EventoNuevaOrden {
+  orden: Orden;
+  clientId: string;
 }

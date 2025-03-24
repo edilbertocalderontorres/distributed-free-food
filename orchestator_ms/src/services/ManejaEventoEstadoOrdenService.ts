@@ -1,33 +1,39 @@
 
 import dotenv from 'dotenv';
 import { obtenerRabbitChannel } from '../events/listener/RabbitEventListener';
+import { WebSocketManager } from '../events/ws/WebSocketManager';
+import { EventoEstado, Orden } from '../models/models';
+
 
 dotenv.config();
-export function suscribirActualizacionEstado(): Promise<void> {
+export async function suscribirActualizacionEstado(): Promise<boolean> {
 
-    const queue = process.env.QUEUE_ACTUALIZACION_ESTADO||'';
-   
-    return obtenerRabbitChannel(queue)
-    .then(channel=>{
+  const queue = process.env.QUEUE_ESTADO_ORDEN || '';
+  const wsManager = WebSocketManager.getInstance();
 
-        channel.consume(
-            queue,
-            (msg) => {
-              if (msg) {
+  const channel = await obtenerRabbitChannel(queue);
 
-                const content = msg.content.toString();
-                console.log(` Mensaje recibido: ${content}`);
-                channel.ack(msg); 
-              }
-            },
-            { noAck: false }
-          );
-    }
+  channel.consume(
+    queue,
+    (msg) => {
+      if (msg) {
 
+        const content: EventoEstado = JSON.parse(msg.content.toString());
+        wsManager.sendMessages(JSON.stringify(content), content.clientId);
     
+        channel.ack(msg);
+      }
+    },
+    { noAck: false }
+  ).then();
 
-    ).catch((error) => {
-        console.log(`Error al escuchar el evento: ${error}`);
-    });
+
+
+
+  if (channel.connection) {
+    return true;
+  }
+  return false;
+
 
 }

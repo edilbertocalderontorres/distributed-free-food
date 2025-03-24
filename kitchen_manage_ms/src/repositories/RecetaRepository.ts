@@ -10,11 +10,11 @@ export class RecetaRepository extends BaseRepository<Receta> {
         super("receta");
     }
 
-  
 
-    async getById(id: string): Promise<Receta | null> {
+
+    async getById(id: string): Promise<Receta> {
         const result = await query(`SELECT * FROM public.${this.tabla} WHERE id = $1`, [id]);
-        return result.rows[0] as Receta || null;
+        return result.rows[0] as Receta;
     }
 
     async getAll(): Promise<Receta[]> {

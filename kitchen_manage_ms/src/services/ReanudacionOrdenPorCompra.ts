@@ -6,7 +6,7 @@ import { gestionar } from './PreparacionOrdenService';
 dotenv.config()
 export async function reanudarOrdenPorCompra(): Promise<boolean> {
 
-    const cola = process.env.COMPRA_REALIZADA_QU || '';
+    const cola = process.env.QUEUE_RESPUESTA_COMPRA || '';
 
     const channel = await obtenerRabbitChannel(cola);
 
@@ -40,8 +40,8 @@ export async function reanudarOrdenPorCompra(): Promise<boolean> {
 async function reanudarOrden(respuesta: RespuestaCompra): Promise<boolean> {
     const ordenRepository = new OrdenRepository();
 
-    const orden: Orden | null = await ordenRepository.getById(respuesta.ordenId);
+    const orden: Orden = await ordenRepository.getById(respuesta.ordenId);
     console.log(`Orden reanudada: ${orden}`);
-    return gestionar(orden as Orden);
+    return gestionar(respuesta.clientId, orden);
 
 }

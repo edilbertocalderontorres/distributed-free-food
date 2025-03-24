@@ -29,7 +29,7 @@ export class BodegaRepository extends BaseRepository<ItemBodega> {
     }
 
     async create(item: ItemBodega): Promise<ItemBodega> {
-        const result = await query(`INSERT INTO public.${this.tabla} (ingredienteId, cantidadDisponible) VALUES ($1, $2) RETURNING *`, [item.ingredienteId, item.cantidadDisponible]);
+        const result = await query(`INSERT INTO public.${this.tabla} (ingredienteId, cantidadDisponible) VALUES ($1, $2) RETURNING *`, [item.ingredienteId, item.cantidaddisponible]);
         return result.rows[0] as ItemBodega;
     }
 

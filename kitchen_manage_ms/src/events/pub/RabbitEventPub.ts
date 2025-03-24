@@ -23,7 +23,7 @@ export const publicarEvento = async (message: any, exchange: string, routingKey:
     throw new CustomError("Error al enviar mensaje", 500, "Servicio RabbitMQ no disponible");
   }
 
-  console.log(`Mensaje enviado: ${JSON.stringify(message)}`);
+ 
 
   setTimeout(() => {
     channel.close();

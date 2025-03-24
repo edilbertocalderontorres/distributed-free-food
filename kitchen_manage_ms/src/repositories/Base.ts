@@ -15,9 +15,9 @@ export class BaseRepository<T> {
     return result.rows as T[];
   }
 
-  async getById(id: string): Promise<T | null> {
+  async getById(id: string): Promise<T> {
     const result = await query(`SELECT * FROM ${this.tableName} WHERE id = $1`, [id]);
-    return result.rows[0] as T || null;
+    return result.rows[0] as T;
   }
 
   

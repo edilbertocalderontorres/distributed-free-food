@@ -2,13 +2,14 @@
 
 import { obtenerRabbitChannel } from '../events/listener/RabbitEventListener';
 import { RecetaRepository } from '../repositories/RecetaRepository';
-import { Receta, Orden, Ingrediente, EstadoOrden, SolicitudCompra } from '../models/models';
+import { Receta, Orden, Ingrediente, EstadoOrden, SolicitudCompra, EventoNuevaOrden } from '../models/models';
 import { IngredienteRepository } from '../repositories/IngredienteRepository';
 import { BodegaRepository } from '../repositories/BodegaRepository';
 import { generarSolicitudCompra } from './SolicitudCompraService';
 import { OrdenRepository } from '../repositories/OrdenRepository';
 import dotenv from 'dotenv';
-import { notificarOrdenFinalizada } from './NotificacionOrdenFinalizada';
+import { notificarEstadoOrden } from './NotificacionOrdenFinalizada';
+import { time } from 'console';
 
 dotenv.config();
 const ingredienteRepository = new IngredienteRepository();
@@ -20,7 +21,7 @@ const recetaRepository = new RecetaRepository();
 
 export async function suscribirEventoNuevaOrden(): Promise<boolean> {
 
-  const queue = process.env.NUEVA_ORDEN_QU || '';
+  const queue = process.env.QUEUE_NUEVA_ORDEN || '';
 
   const channel = await obtenerRabbitChannel(queue);
 
@@ -32,16 +33,13 @@ export async function suscribirEventoNuevaOrden(): Promise<boolean> {
     (msg) => {
       if (msg) {
 
-        const orden: Orden = JSON.parse(msg.content.toString());
-        gestionar(orden).then();
-
-
-        console.log(` Mensaje recibido: ${orden}`);
+        const evt: EventoNuevaOrden = JSON.parse(msg.content.toString());
+        gestionar(evt.clientId, evt.orden).then();
         channel.ack(msg);
       }
     },
     { noAck: false }
-  );
+  ).then();
 
   if (channel.connection) {
     return true;
@@ -50,7 +48,7 @@ export async function suscribirEventoNuevaOrden(): Promise<boolean> {
 
 }
 
-export async function gestionar(orden: Orden): Promise<boolean> {
+export async function gestionar(clientId: string, orden: Orden): Promise<boolean> {
 
   let receta: Receta | null = null;
 
@@ -66,11 +64,6 @@ export async function gestionar(orden: Orden): Promise<boolean> {
   }
 
 
-
-
-
-
-
   if (receta === null) {
     throw new Error('Receta is null');
   }
@@ -83,7 +76,7 @@ export async function gestionar(orden: Orden): Promise<boolean> {
 
   if (ingredientesFaltantes.length > 0) {
 
-    const solicitudCompra = { ordenId: orden.id, ingredientes: ingredientesFaltantes } as SolicitudCompra;
+    const solicitudCompra = { clientId: clientId, ordenId: orden.id, ingredientes: ingredientesFaltantes } as SolicitudCompra;
 
 
     return generarSolicitudCompra(solicitudCompra);
@@ -91,32 +84,49 @@ export async function gestionar(orden: Orden): Promise<boolean> {
 
   }
 
-  return preparar(orden);
+  return preparar(clientId, orden);
 }
 
-export async function preparar(orden: Orden): Promise<boolean> {
+export async function preparar(clientId: string, orden: Orden): Promise<boolean> {
 
 
 
-  let estado: EstadoOrden = "PREPARANDO" as EstadoOrden;
+  let estado: EstadoOrden = "EN PREPARACION";
+  orden.estado = estado;
+  const interval = 5000;
+  const steps = 3; 
+  const increment = 90 / steps; 
 
-  setInterval(() => {
-    estado = "FINALIZADA" as EstadoOrden;
-    ordenRepository.actualizarEstado(orden.id, estado);
-    orden.estado = estado;
-    return notificarOrdenFinalizada(orden);
-  }, 30000);
+  for (let percent = 0; percent <= 90; percent += increment) {
+      await new Promise(resolve => setTimeout(resolve, interval)); 
+      notificarEstadoOrden(clientId, orden, Math.round(percent));
+  }
 
-  return false;
-}
+  // Luego de los 15s, enviar el 100%
+  estado = "FINALIZADA" as EstadoOrden;
+  ordenRepository.actualizarEstado(orden.id, estado);
+  orden.estado = estado;
+  return notificarEstadoOrden(clientId, orden, 100);
+
+  
+  }
+  
+
 
 
 async function validarStock(ingredientes: Ingrediente[]): Promise<Ingrediente[]> {
+  
+  const stockDisponibles = await Promise.all(
+    ingredientes.map(async (ingrediente) => {
+      const ing = await bodegaRepository.getByIngredienteId(ingrediente.id);
+      return { ingrediente, ing };
+    })
+  );
 
-
-  return ingredientes
-    .filter(async ingrediente => (await bodegaRepository.getByIngredienteId(ingrediente.id))
-      .cantidadDisponible == 0);
+  
+  return stockDisponibles
+    .filter(({ ing }) => ing?.cantidaddisponible === 0) 
+    .map(({ ingrediente }) => ingrediente);
 }
 
 async function seleccionarReceta(): Promise<Receta> {

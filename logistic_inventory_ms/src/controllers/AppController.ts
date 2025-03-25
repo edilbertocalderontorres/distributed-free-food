@@ -2,7 +2,7 @@
 
 import { Get } from "../utils/httputils/routing/RouteDecorators";
 import { IncomingMessage, ServerResponse } from "http";
-import { suscribirEventoNuevaCompra } from "../services/ProcesarSolicitudCOmpra";
+import { suscribirEventoNuevaCompra } from "../services/ProcesarSolicitudCompra";
 
 export class AppController {
 

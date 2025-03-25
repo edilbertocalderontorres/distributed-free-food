@@ -6,7 +6,7 @@ x-global-env: &global-env
   PG_HOST: postgres_db
   PG_PORT: 5432
   PG_DATABASE: almuerzos_db
-  RABBITMQ_URL: amqp://rabbitmq
+  RABBITMQ_URL: amqp://rabbitmq:5672
   
   EXCHANGE_NUEVA_ORDEN: nueva.orden.ex
   ROUTING_KEY_NUEVA_ORDEN: nueva_orden
@@ -23,10 +23,7 @@ x-global-env: &global-env
   EXCHANGE_RESPUESTA_COMPRA: respuesta.compra.ex
   ROUTING_KEY_RESPUESTA_COMPRA: respuesta_compra
   QUEUE_RESPUESTA_COMPRA: respuesta.compra.qu
-
-
-
-  services:
+services:
   nginx:
     image: nginx:latest
     container_name: nginx_frontend
@@ -37,7 +34,6 @@ x-global-env: &global-env
       #- ./frontend:/usr/share/nginx/html:ro
     depends_on:
       - orchestator
-      - inventory-logistic
     networks:
       - app_network
 
@@ -56,7 +52,7 @@ x-global-env: &global-env
 
   kitchen-manage:
     build: ./kitchen_manage_ms
-    container_name: ms_kitchen
+    container_name: kitchen_manage_ms
     environment:
       <<: *global-env
     depends_on:
@@ -65,13 +61,14 @@ x-global-env: &global-env
     networks:
       - app_network
 
-  inventory-logistic:
+  logistic-inventory:
     build: ./logistic_inventory_ms
-    container_name: ms_logistic_inventory
+    container_name: logistic_inventory_ms
     environment:
       <<: *global-env
     depends_on:
       - postgres
+      - rabbitmq
     networks:
       - app_network
 

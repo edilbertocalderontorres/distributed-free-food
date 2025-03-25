@@ -54,9 +54,10 @@ export async function gestionar(clientId: string, orden: Orden): Promise<boolean
 
   if (orden.recetaid == null) {
     receta = await seleccionarReceta();
-    ordenRepository.asociarReceta(orden.id, receta.id).then(() => {
-     
-    });
+    orden.recetaid = receta.id;
+    
+    await ordenRepository.asociarReceta(orden.id, receta.id);
+    
 
   } else {
 
@@ -95,21 +96,12 @@ export async function gestionar(clientId: string, orden: Orden): Promise<boolean
   ingredientesCopy.forEach(async (ing: Ingrediente) => {
     return await bodegaRepository.descontarDelStock(ing.id, 1);
   });
-  return preparar(clientId, orden, ingredientes);
+  return preparar(clientId, orden);
 }
 
 
 
-
-
-
-
-
-
-
-async function preparar(clientId: string, orden: Orden, ingredientes: Ingrediente[]): Promise<boolean> {
-
-
+async function preparar(clientId: string, orden: Orden): Promise<boolean> {
 
   let estado: EstadoOrden = "EN PREPARACION";
   orden.estado = estado;
@@ -120,15 +112,14 @@ async function preparar(clientId: string, orden: Orden, ingredientes: Ingredient
   //simular la preparacion de la orden, que a escala son 15 segundos
 
   for (let percent = 0; percent <= 90; percent += increment) {
-    await new Promise(resolve => setTimeout(resolve, interval));
+    await new Promise(resolve => setTimeout(resolve, interval-1));
     notificarEstadoOrden(clientId, orden, Math.round(percent));
   }
 
 
   estado = "FINALIZADA" as EstadoOrden;
-
-  ordenRepository.actualizarEstado(orden.id, estado);
-
+  orden.estado = estado;
+  await ordenRepository.actualizarEstado(orden.id, estado);
   return notificarEstadoOrden(clientId, orden, 100);
 
 

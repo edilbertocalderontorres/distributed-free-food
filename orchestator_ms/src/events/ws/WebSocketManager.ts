@@ -31,7 +31,7 @@ export  class WebSocketManager {
         this.wss?.on('connection', (ws: WebSocket, req: IncomingMessage) => {
 
 
-            const clientId = req.headers["x-clientid"] as string;
+            const clientId = req.url?.substring(1).trim() as string;
             this.clients.set(clientId, ws);
             console.log('Conexión establecida', clientId);
 

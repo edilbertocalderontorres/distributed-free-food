@@ -1,6 +1,6 @@
 
 
-import { Post } from "../utils/httputils/routing/RouteDecorators";
+import { Post,Get } from "../utils/httputils/routing/RouteDecorators";
 import { IncomingMessage, ServerResponse } from "http";
 import { manejarOrden } from '../services/OrdenService';
 import { Beneficiario, Orden, EstadoOrden } from '../models/models';
@@ -69,16 +69,28 @@ export class OrdenController {
 
         });
 
-
-
-
-
-
-
-
-
-
-
-
     }
+
+
+    /*@Get("/ordenes")
+    public async obtenerEstadoOrdenes(req: IncomingMessage, res: ServerResponse): Promise<void> {
+        try {
+            const ordenes = await obtenerEstadoOrdenes();
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify(ordenes));
+        } catch (error) {
+            this.manejarError(res, error);
+        }
+    }
+
+    @Get("/ordenes/historial")
+    public async obtenerHistorialPedidos(req: IncomingMessage, res: ServerResponse): Promise<void> {
+        try {
+            const historial = await obtenerHistorialPedidos();
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify(historial));
+        } catch (error) {
+            this.manejarError(res, error);
+        }
+    }*/
 }

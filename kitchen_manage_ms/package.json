@@ -11,7 +11,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "yarn@1.22.19",
+  "packageManager": "yarn@4.7.0",
   "devDependencies": {
     "@types/amqplib": "^0.10.7",
     "@types/node": "^22.13.11",
@@ -25,7 +25,6 @@
     "amqplib": "^0.10.5",
     "dotenv": "^16.4.7",
     "kitchen_manage_ms": "file:",
-    "orchestator_ms": "file:",
     "pg": "^8.14.1",
     "pg-format": "^1.0.4"
   }

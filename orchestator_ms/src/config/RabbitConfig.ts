@@ -9,7 +9,7 @@ export const connectRabbitMQ = async (): Promise<ChannelModel> => {
   try {
     const channelModel = await amqp.connect(RABBITMQ_URL);
     
-    console.log("Conectado a RabbitMQ");
+  
     return await channelModel;
     } catch (error) {
     console.error(" Error al conectar con RabbitMQ", error);

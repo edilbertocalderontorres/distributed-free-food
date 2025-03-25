@@ -9,7 +9,7 @@ export async function generarSolicitudCompra(solicitud: SolicitudCompra):Promise
     const exchange = process.env.EXCHANGE_SOLICITUD_COMPRA || '';
     const routingKey = process.env.ROUTING_KEY_SOLICITUD_COMPRA || '';
 
-    
+    console.log(`Publicando solicitud de compra: ${solicitud}`);
 
     return publicarEvento(solicitud, exchange, routingKey);
 }

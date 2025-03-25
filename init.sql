@@ -67,7 +67,7 @@ GRANT ALL PRIVILEGES ON SCHEMA public TO app_user;
 
 INSERT INTO public.ingrediente (id, nombre) VALUES
     (gen_random_uuid(), 'Tomate'),
-    (gen_random_uuid(), 'Limón'),
+    (gen_random_uuid(), 'Limon'),
     (gen_random_uuid(), 'Papa'),
     (gen_random_uuid(), 'Arroz'),
     (gen_random_uuid(), 'Ketchup'),

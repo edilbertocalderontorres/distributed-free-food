@@ -30,7 +30,7 @@ export interface RecetaIngrediente {
 
 export interface ItemBodega {
   ingredienteid: UUID;
-  cantidadDisponible: number;
+  cantidaddisponible: number;
 }
 
 
@@ -61,7 +61,7 @@ export interface SolicitudCompra {
 export interface RespuestaCompra {
   clientid: string;
   ordenid: UUID;
-  compra: Compra;
+  compra: Compra[];
 
 }
 

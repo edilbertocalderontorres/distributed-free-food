@@ -23,11 +23,11 @@ export class BodegaRepository extends BaseRepository<ItemBodega> {
     }
 
     async getstockByIngredienteId(ingredienteId: string): Promise<number> {
-        const result = await query(`SELECT cantidadDisponible FROM public.${this.tabla} WHERE ingredienteId = $1`, [ingredienteId]);
+        const result = await query(`SELECT cantidaddisponible FROM public.${this.tabla} WHERE ingredienteId = $1`, [ingredienteId]);
         return result.rows[0].cantidadDisponible as number;
     }
 
-    async actualizarStock(ingredienteId: string, cantidad: number): Promise<boolean> {
+    async descontarDelStock(ingredienteId: string, cantidad: number): Promise<boolean> {
 
         const result = await query(
             `UPDATE public.${this.tabla} 
@@ -41,7 +41,7 @@ export class BodegaRepository extends BaseRepository<ItemBodega> {
     }
 
     async create(item: ItemBodega): Promise<ItemBodega> {
-        const result = await query(`INSERT INTO public.${this.tabla} (ingredienteId, cantidadDisponible) VALUES ($1, $2) RETURNING *`, [item.ingredienteid, item.cantidadDisponible]);
+        const result = await query(`INSERT INTO public.${this.tabla} (ingredienteid, cantidaddisponible) VALUES ($1, $2) RETURNING *`, [item.ingredienteid, item.cantidaddisponible]);
         return result.rows[0] as ItemBodega;
     }
 

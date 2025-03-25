@@ -22,7 +22,7 @@ export interface Ingrediente {
   nombre: string;
 }
 
-export interface Bodega {
+export interface ItemBodega {
   ingredienteid: UUID;
   cantidaddisponible: number;
 }
@@ -61,4 +61,8 @@ export interface EventoEstado {
 export interface EventoNuevaOrden {
   orden: Orden;
   clientid: string;
+}
+export interface Paginacion {
+  page: number;
+  limit: number;
 }

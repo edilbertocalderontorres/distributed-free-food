@@ -22,49 +22,47 @@ import { RouteRegistry } from "./RouteRegistry";
  * 
  * 
  * */
-export function Get(path: string): MethodDecorator {
-  return (target:Object, propertyKey:string|symbol,  descriptor:TypedPropertyDescriptor<any>) => {
-    
-    RouteRegistry.addRoute("GET", path, descriptor.value as Function, target.constructor);
+export function createMethodDecorator(method: string) {
+  return (path: string): MethodDecorator => {
+    return (target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<any>) => {
+      
+      const originalMethod = descriptor.value;
+      
+      RouteRegistry.addRoute(method, path, async (req: any, res: any) => {
+        const pathParams = extractPathParams(path, req.url);
+        const queryParams = req.query;
+        
+        
+        await originalMethod.apply(target, [req, res, pathParams, queryParams]);
+      }, target.constructor);
+    };
   };
 }
 
-export function Post(path: string): MethodDecorator {
-  return (target:Object, propertyKey:string|symbol,  descriptor:TypedPropertyDescriptor<any>) => {
-    RouteRegistry.addRoute("POST", path, descriptor.value as Function, target.constructor);
-  };
+// Métodos HTTP mejorados
+export const Get = createMethodDecorator("GET");
+export const Post = createMethodDecorator("POST");
+export const Put = createMethodDecorator("PUT");
+export const Delete = createMethodDecorator("DELETE");
+export const Patch = createMethodDecorator("PATCH");
+export const Options = createMethodDecorator("OPTIONS");
+export const Head = createMethodDecorator("HEAD");
 
-  
+
+function extractPathParams(routePath: string, requestUrl: string): Record<string, string> {
+  const routeParts = routePath.split("/");
+  const urlParts = requestUrl.split("/");
+  const params: Record<string, string> = {};
+
+  routeParts.forEach((part, index) => {
+    if (part.startsWith(":")) {
+      const paramName = part.slice(1);
+      params[paramName] = urlParts[index];
+    }
+  });
+
+  return params;
 }
 
-export function Put(path: string): MethodDecorator {
-    return (target:Object, propertyKey:string|symbol,  descriptor:TypedPropertyDescriptor<any>) => {
-      RouteRegistry.addRoute("PUT", path, descriptor.value as Function, target.constructor);
-    };
-  }
-
-  export function Delete(path: string): MethodDecorator {
-    return (target:Object, propertyKey:string|symbol,  descriptor:TypedPropertyDescriptor<any>) => {
-      RouteRegistry.addRoute("DELETE", path, descriptor.value as Function, target.constructor);
-    };
-  }
-
-  export function Patch(path: string): MethodDecorator {
-    return (target:Object, propertyKey:string|symbol,  descriptor:TypedPropertyDescriptor<any>) => {
-      RouteRegistry.addRoute("PATCH", path, descriptor.value as Function, target.constructor);
-    };
-  }
-
-  export function Options(path: string): MethodDecorator {
-    return (target:Object, propertyKey:string|symbol,  descriptor:TypedPropertyDescriptor<any>) => {
-      RouteRegistry.addRoute("OPTIONS", path, descriptor.value as Function, target.constructor);
-    };
-  }
-
-  export function Head(path: string): MethodDecorator {
-    return (target:Object, propertyKey:string|symbol,  descriptor:TypedPropertyDescriptor<any>) => {
-      RouteRegistry.addRoute("HEAD", path, descriptor.value as Function, target.constructor);
-    };
-  }
 
 

@@ -1,16 +1,17 @@
 
 
-import { Post,Get } from "../utils/httputils/routing/RouteDecorators";
+import { Post, Get } from "../utils/httputils/routing/RouteDecorators";
 import { IncomingMessage, ServerResponse } from "http";
 import { manejarOrden } from '../services/OrdenService';
 import { Beneficiario, Orden, EstadoOrden } from '../models/models';
-import { CustomError } from "../exception/CustomError";
-import { ErrorDto } from "./dto/ErrorDto";
-import { suscribirActualizacionEstado } from "../services/ManejaEventoEstadoOrdenService";
+import { manejarError } from './error/ErrorHandler';
+import { obtenerEstadoOrdenes, obtenerHistorialPedidos } from "../services/CrudService";
+import { Wrapper } from "./dto/CrudDto";
+
 export class OrdenController {
 
     constructor() {
-        
+
     }
 
     @Post("/orden")
@@ -50,21 +51,8 @@ export class OrdenController {
 
 
             } catch (error) {
-                let mensaje = "Error interno del servidor";
-                let codigoHttp: number;
-                let errorCause: string;
+                manejarError(res, error);
 
-                if (error instanceof CustomError) {
-
-                    mensaje = error.message;
-                    codigoHttp = error.statusCode || 500;
-                    errorCause = error.error || "";
-                } else {
-                    errorCause = "Error desconocido";
-                    codigoHttp = 500;
-                }
-                res.writeHead(codigoHttp, { "Content-Type": "application/json" });
-                res.end(JSON.stringify(new ErrorDto(errorCause, mensaje)));
             }
 
         });
@@ -72,25 +60,48 @@ export class OrdenController {
     }
 
 
-    /*@Get("/ordenes")
+    @Get("/ordenes")
     public async obtenerEstadoOrdenes(req: IncomingMessage, res: ServerResponse): Promise<void> {
-        try {
-            const ordenes = await obtenerEstadoOrdenes();
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(JSON.stringify(ordenes));
-        } catch (error) {
-            this.manejarError(res, error);
-        }
+
+        let body = "";
+        let jsonBody: Wrapper;
+        req.on("data", (chunk) => {
+            body += chunk.toString();
+
+        });
+
+        req.on("end", async () => {
+            try {
+                const ordenes = await obtenerEstadoOrdenes();
+                res.writeHead(200, { "Content-Type": "application/json" });
+                res.end(JSON.stringify(ordenes));
+            } catch (error) {
+                manejarError(res, error);
+            }
+        });
     }
 
     @Get("/ordenes/historial")
-    public async obtenerHistorialPedidos(req: IncomingMessage, res: ServerResponse): Promise<void> {
+    public async obtenerHistorialPedidos(req: IncomingMessage, res: ServerResponse, pathParams: any, queryParams: any): Promise<void> {
+
+        let body = "";
+        let jsonBody: Wrapper;
+        req.on("data", (chunk) => {
+            body += chunk.toString();
+
+        });
+
+        req.on("end", async () => {
+            jsonBody = await JSON.parse(body);
         try {
-            const historial = await obtenerHistorialPedidos();
+            const historial = await obtenerHistorialPedidos(jsonBody.paginacion);
             res.writeHead(200, { "Content-Type": "application/json" });
             res.end(JSON.stringify(historial));
         } catch (error) {
-            this.manejarError(res, error);
+            manejarError(res, error);
         }
-    }*/
+    });
+    }
+
+
 }

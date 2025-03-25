@@ -16,6 +16,7 @@
     "@types/amqplib": "^0.10.7",
     "@types/node": "^22.13.11",
     "@types/pg": "^8.11.11",
+    "@types/pg-format": "^1.0.5",
     "@types/ws": "^8.18.0",
     "nodemon": "^3.1.9",
     "ts-node": "^10.9.2",
@@ -26,6 +27,7 @@
     "dotenv": "^16.4.7",
     "orchestator_ms": "file:",
     "pg": "^8.14.1",
+    "pg-format": "^1.0.4",
     "ws": "^8.18.1"
   }
 }

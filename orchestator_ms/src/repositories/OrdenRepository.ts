@@ -2,10 +2,10 @@ import { BaseRepository } from "./Base";
 import { Orden } from '../models/models';
 import { query } from "../config/PostgresConfig";
 export class OrdenRepository extends BaseRepository<Orden> {
-    tabla = "orden";
-    
+  tabla = "orden";
+
   constructor() {
-    
+
     super("orden");
   }
 
@@ -28,5 +28,13 @@ export class OrdenRepository extends BaseRepository<Orden> {
     const result = await query(`SELECT * FROM public.${this.tabla} WHERE beneficiarioId = $1 ORDER BY fechaActualizacion DESC limit 1`, [beneficiarioId]);
     return result.rows[0] as Orden || null;
   }
-    
+
+  async getHistorialPedidos(page: number, limit: number): Promise<any[]> {
+    const offset = (page - 1) * limit;
+    const result = await query(`SELECT r.nombre, o.* FROM ${this.tabla} o 
+      INNER JOIN receta r ON r.id = o.recetaid
+      ORDER BY o.fechaactualizacion DESC`);
+    return result.rows as { receta: string, orden: any }[];
+  }
+
 }

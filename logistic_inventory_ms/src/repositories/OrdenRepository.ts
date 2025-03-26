@@ -24,18 +24,5 @@ export class OrdenRepository extends BaseRepository<Orden> {
     return result.rows[0] as Orden;
   }
 
-  async getByBeneficiarioId(beneficiarioId: string): Promise<Orden | null> {
-    const result = await query(`SELECT * FROM public.${this.tabla} WHERE beneficiarioId = $1 ORDER BY fechaActualizacion DESC limit 1`, [beneficiarioId]);
-    return result.rows[0] as Orden || null;
-  }
-
-  async actualizarEstado(ordenId: string, estado: EstadoOrden): Promise<void> {
-
-    await query(`UPDATE public.${this.tabla} SET estado = $1, fechaActualizacion = NOW() WHERE id = $2`, [estado, ordenId]);
-  }
-
-  async asociarReceta(ordenId: string, recetaId: string): Promise<void> {
-    await query(`UPDATE public.${this.tabla} SET recetaId = $1, fechaActualizacion = NOW() WHERE id = $2`, [recetaId, ordenId]);
-  }
     
 }

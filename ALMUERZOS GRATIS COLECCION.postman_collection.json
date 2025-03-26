@@ -11,6 +11,23 @@
 			"name": "NUEVA ORDEN",
 			"event": [
 				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Obtiene el valor actual del contador (si no existe, inicia en 25)\r",
+							"let currentValue = pm.environment.get(\"valorDinamico\") || 25;\r",
+							"if (currentValue < 125) {\r",
+							"// Asigna el valor actualizado al entorno\r",
+							"pm.environment.set(\"valorDinamico\", currentValue + 1);\r",
+							"\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
 					"listen": "test",
 					"script": {
 						"exec": [
@@ -28,13 +45,13 @@
 				"header": [
 					{
 						"key": "x-clientid",
-						"value": "edy",
+						"value": "randomClientId1",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"beneficiario\": {\r\n        \"tipoDocumento\": \"CC\",\r\n        \"numDocumento\": \"66691016\"\r\n    }\r\n}\r\n",
+					"raw": "{\r\n    \"beneficiario\": {\r\n        \"tipodocumento\": \"CC\",\r\n        \"numdocumento\": \"1140877594\"\r\n    }\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -74,11 +91,11 @@
 				}
 			],
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"data\": \"\",\r\n    \"paginacion\": {\r\n        \"page\": 1,\r\n        \"limit\": 10\r\n    }\r\n}",
+					"raw": "{\r\n    \"data\": \"\",\r\n    \"paginacion\": {\r\n        \"page\": 1,\r\n        \"limit\": 5\r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -95,50 +112,6 @@
 					"path": [
 						"compras",
 						"historial"
-					]
-				},
-				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
-			},
-			"response": []
-		},
-		{
-			"name": "ULTIMAS ORDENES",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Successful POST request\", function () {",
-							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
-							"});",
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"data\": \"\",\r\n    \"paginacion\": {\r\n        \"page\": 1,\r\n        \"limit\": 10\r\n    }\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/ordenes",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"ordenes"
 					]
 				},
 				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
@@ -163,11 +136,11 @@
 				}
 			],
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"data\": \"\",\r\n    \"paginacion\": {\r\n        \"page\": 3,\r\n        \"limit\": 10\r\n    }\r\n}",
+					"raw": "{\r\n    \"data\": \"\",\r\n    \"paginacion\": {\r\n        \"page\": 1,\r\n        \"limit\": 1\r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -192,6 +165,51 @@
 		},
 		{
 			"name": "INVENTARIO",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"data\": \"\",\r\n    \"paginacion\": {\r\n        \"page\": 1,\r\n        \"limit\": 10\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/bodega/inventario",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bodega",
+						"inventario"
+					]
+				},
+				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "RECETAS",
 			"event": [
 				{
 					"listen": "test",

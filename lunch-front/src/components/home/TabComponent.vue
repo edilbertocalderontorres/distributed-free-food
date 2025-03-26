@@ -24,12 +24,9 @@ import OrdenesComponent from './OrdenesComponent.vue'
 import InventarioComponent from './InventarioComponent.vue'
 import ComprasComponent from './ComprasComponent.vue'
 import RecetasComponent from './RecetasComponent.vue'
-import { WebSocketClient } from '@/stores/WebSocketClient'
 
 const tabs = ['Nueva Orden', 'Órdenes', 'Inventario', 'Compras', 'Recetas']
 const activeTab = ref('Nueva Orden')
-
-const ws = new WebSocketClient()
 
 const components = {
   'Nueva Orden': NuevaOrdenComponent,

@@ -15,6 +15,7 @@ export async function manejarOrden(clientId: string, orden: Orden): Promise<bool
     if (ordenExistente?.estado === "PENDIENTE" || ordenExistente?.estado === "EN PREPARACION") {
         throw new CustomError("Ya existe una orden en curso para este beneficiario", 409, "No se puede crear la orden");
     } else {
+       
         const res = await repository.create(orden);
 
         const evt = { clientid: clientId, orden: res };

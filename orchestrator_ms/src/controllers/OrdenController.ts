@@ -31,9 +31,11 @@ export class OrdenController {
             try {
                 container = JSON.parse(body);
 
+                console.log("Por acá también");
 
                 orden = {
                     id: "",
+                    recetanombre: null,
                     beneficiarioid: container.beneficiario.tipodocumento.concat(container.beneficiario.numdocumento),
                     recetaid: null,
                     estado: "PENDIENTE" as EstadoOrden,
@@ -81,7 +83,7 @@ export class OrdenController {
         });
     }
 
-    @Get("/ordenes/historial")
+    @Post("/ordenes/historial")
     public async obtenerHistorialPedidos(req: IncomingMessage, res: ServerResponse, pathParams: any, queryParams: any): Promise<void> {
 
         let body = "";

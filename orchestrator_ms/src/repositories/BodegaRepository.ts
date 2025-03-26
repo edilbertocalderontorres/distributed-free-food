@@ -45,7 +45,7 @@ export class BodegaRepository extends BaseRepository<ItemBodega> {
         return result.rows[0] as ItemBodega;
     }
 
-    async obtenerInventario(): Promise<any[]> {
+    async obtenerInventario(): Promise<{nombre:string, cantidaddisponible:number}[]> {
         const result = await query(`SELECT i.nombre, b.cantidaddisponible FROM public.${this.tabla} b inner join public.ingrediente i on b.ingredienteid = i.id`);
         return result.rows as {nombre:string, cantidaddisponible:number}[];
     }

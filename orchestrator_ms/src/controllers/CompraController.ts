@@ -1,12 +1,12 @@
 import { IncomingMessage, ServerResponse } from "http";
-import { Get } from "../utils/httputils/routing/RouteDecorators";
+import { Get, Post } from "../utils/httputils/routing/RouteDecorators";
 import { manejarError } from "./error/ErrorHandler";
 import { obtenerHistorialCompras } from "../services/CrudService";
 import { json } from 'stream/consumers';
 import { Wrapper } from "./dto/CrudDto";
 
 export class CompraController {
-    @Get("/compras/historial")
+    @Post("/compras/historial")
     public async obtenerHistorialCompras(req: IncomingMessage, res: ServerResponse): Promise<void> {
 
         
@@ -23,6 +23,9 @@ export class CompraController {
 
             try {
                 const compras = await obtenerHistorialCompras(jsonBody.paginacion);
+
+                console.log(compras);
+
                 res.writeHead(200, { "Content-Type": "application/json" });
                 res.end(JSON.stringify(compras));
             } catch (error) {
@@ -31,3 +34,4 @@ export class CompraController {
         });
     }
 }
+

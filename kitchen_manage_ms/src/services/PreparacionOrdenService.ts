@@ -55,8 +55,10 @@ export async function gestionar(clientId: string, orden: Orden): Promise<boolean
   if (orden.recetaid == null) {
     receta = await seleccionarReceta();
     orden.recetaid = receta.id;
+    orden.recetanombre = receta.nombre;
     
-    await ordenRepository.asociarReceta(orden.id, receta.id);
+    
+    await ordenRepository.asociarReceta(orden.id, receta.id, receta.nombre);
     
 
   } else {
@@ -108,6 +110,7 @@ async function preparar(clientId: string, orden: Orden): Promise<boolean> {
   const interval = 3000;
   const steps = 3;
   const increment = 90 / steps;
+  
 
   //simular la preparacion de la orden, que a escala son 15 segundos
 

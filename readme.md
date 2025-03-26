@@ -2,8 +2,14 @@
 
 ## Descripción General
 
-Este proyecto implementa un sistema de pedidos de platos de comida utilizando una arquitectura de microservicios en **Node.js**. Se gestiona la preparación de pedidos con asincronía mediante **RabbitMQ** y se ofrece una interfaz en **Vue.js** con WebSockets para actualización en tiempo real.
-El sistema de versionamiento del proyecto usa un estilo mono repositorio, donde se encuentran todos los microservicios y la interfaz gráfica.
+Este proyecto implementa un sistema de pedidos de platos de comida utilizando una arquitectura de microservicios en **Node.js** sin framework, potenciando la asincronía con una sencilla implmentacion de  WebSockets para actualización en tiempo real. 
+
+Se gestiona la preparación de pedidos con asincronía mediante **RabbitMQ** y se ofrece una interfaz en **Vue.js** sencilla, puesto que la solucion está orientada al Backend.
+
+
+
+
+El sistema de versionamiento del proyecto usa un estilo mono repositorio, donde se encuentran todos los microservicios y la interfaz gráfica y se despliegan en modo multicontenedor con docker-compose.
 
 ## Tecnologías Utilizadas
 
@@ -53,13 +59,13 @@ El sistema está compuesto por los siguientes microservicios:
 
 ```
 /backend
-  /orchestator_ms
+  /orchestrator_ms
   /kitchen_manage_ms
   /logistic_inventory_ms
-/frontend
+/lunch-front
   /src
+  /nginx.conf
 /docker-compose.yml
-/nginx.conf
 /init.sql
 /rabbitmq.config
 /definitions.json
@@ -73,11 +79,49 @@ El sistema está compuesto por los siguientes microservicios:
 Para levantar el entorno, ejecutar:
 
 ```sh
-docker-compose up -d
+docker-compose up --build  -d
 ```
 
-Esto iniciará todos los servicios necesarios dentro de una red interna, 
+Esto iniciará todos los servicios necesarios dentro de una red de docker,
 junto con sus respectivas configuraciones de arranque para colas y exchanges RabbitMQ y PostgreSQL(modelo de datos y sus inserts base).
+
+EL servicio de Nginx se encargará de servir la interfaz gráfica en el puerto 80. Para acceder a la interfaz, abrir un navegador y dirigirse a `http://localhost`.
+
+## UI
+### Pestaña para generar pedidos.
+
+![alt text](image.png)
+
+
+## Pedido solicitado, mostrando actualizaciones en tiempo real.
+
+![alt text](image-5.png)
+
+
+
+
+### Pestaña para ver el historial de ordenes.
+![alt text](image-1.png)
+
+
+
+#### Pestaña para ver el inventario de ingredientes.
+
+![alt text](image-2.png)
+
+
+
+
+### Pestaña para ver el historial de compras.
+
+![alt text](image-3.png)
+
+
+
+
+### Pestaña para ver las recetas y sus ingredientes.
+
+![alt text](image-4.png)
 
 
 ## Mejoras Futuras

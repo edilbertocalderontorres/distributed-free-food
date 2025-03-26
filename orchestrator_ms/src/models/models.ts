@@ -34,11 +34,24 @@ export interface Plato {
   cantidad: number;
 }
 
+export interface RecetaIngrediente { receta: string, ingrediente: string, descripcion: string, ingredienteid: string, cantidad: number }
+
+
+
+export interface RecetaAgrupada {
+  nombre: string, descripcion: string,
+  ingredientes: IngredienteAgrupado[]
+}
+
+export interface IngredienteAgrupado { ingrediente: string, cantidad: number, ingredienteid: string }
+
+
 export type EstadoOrden = "PENDIENTE" | "EN PREPARACION" | "FINALIZADA";
 
 export interface Orden {
   id: UUID;
   beneficiarioid: string;
+  recetanombre: string|null;
   recetaid: UUID | null;
   estado: EstadoOrden;
   fechacreacion: Date;

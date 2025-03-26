@@ -40,6 +40,7 @@ export interface Orden {
   id: UUID;
   beneficiarioid: string;
   recetaid: UUID | null;
+  recetanombre: string | null;
   estado: EstadoOrden;
   fechacreacion: Date;
   fechaactualizacion: Date;

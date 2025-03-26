@@ -18,29 +18,30 @@ CREATE TABLE IF NOT EXISTS public.ingrediente (
     nombre VARCHAR(255) UNIQUE NOT NULL
 );
 CREATE TABLE IF NOT EXISTS public.receta_ingrediente (
-    recetaId UUID REFERENCES receta(id) ON DELETE CASCADE,
-    ingredienteId UUID REFERENCES ingrediente(id) ON DELETE CASCADE,
+    recetaid UUID REFERENCES receta(id) ON DELETE CASCADE,
+    ingredienteid UUID REFERENCES ingrediente(id) ON DELETE CASCADE,
     cantidad INT NOT NULL, 
-    PRIMARY KEY (recetaId, ingredienteId)
+    PRIMARY KEY (recetaid, ingredienteid)
 );
 
 
 
 CREATE TABLE IF NOT EXISTS public.bodega (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    ingredienteId UUID REFERENCES ingrediente(id),
-    cantidadDisponible INT DEFAULT 5
+    ingredienteid UUID REFERENCES ingrediente(id),
+    cantidaddisponible INT DEFAULT 5
 );
 
 
 
 CREATE TABLE IF NOT EXISTS public.orden (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    beneficiarioId VARCHAR(100),
-    recetaId UUID REFERENCES receta(id),
+    beneficiarioid VARCHAR(100),
+    recetaid UUID REFERENCES receta(id),
+    recetanombre VARCHAR(255),
     estado VARCHAR(20) CHECK (estado IN ('PENDIENTE','EN REPARACION', 'FINALIZADA')) NOT NULL,
-    fechaCreacion TIMESTAMP DEFAULT now(),
-    fechaActualizacion TIMESTAMP DEFAULT now()
+    fechacreacion TIMESTAMP DEFAULT now(),
+    fechaactualizacion TIMESTAMP DEFAULT now()
 );
 
 
@@ -48,9 +49,9 @@ CREATE TABLE IF NOT EXISTS public.orden (
 
 CREATE TABLE IF NOT EXISTS public.compra (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    ingredienteId UUID REFERENCES ingrediente(id),
-    cantidadComprada INT NOT NULL,
-    fechaCompra TIMESTAMP DEFAULT now()
+    ingredienteid UUID REFERENCES ingrediente(id),
+    cantidadcomprada INT NOT NULL,
+    fechacompra TIMESTAMP DEFAULT now()
 );
 
 
@@ -77,7 +78,7 @@ INSERT INTO public.ingrediente (id, nombre) VALUES
     (gen_random_uuid(), 'Carne'),
     (gen_random_uuid(), 'Pollo');
 
-INSERT INTO public.bodega (id, ingredienteId, cantidadDisponible) 
+INSERT INTO public.bodega (id, ingredienteid, cantidaddisponible) 
 SELECT gen_random_uuid(), id, 5 FROM public.ingrediente;
 
 
@@ -99,15 +100,15 @@ BEGIN
     -- Ensalada César
     SELECT id INTO receta_id FROM public.receta WHERE nombre = 'Ensalada César';
     FOR ingrediente_id IN 
-        SELECT id FROM public.ingrediente WHERE nombre IN ('Lechuga', 'Pollo', 'Queso', 'Limón') 
+        SELECT id FROM public.ingrediente WHERE nombre IN ('Lechuga', 'Pollo', 'Queso', 'Limon') 
     LOOP
-        INSERT INTO public.receta_ingrediente (recetaId, ingredienteId,cantidad) VALUES (receta_id, ingrediente_id,1);
+        INSERT INTO public.receta_ingrediente (recetaid, ingredienteid,cantidad) VALUES (receta_id, ingrediente_id,1);
     END LOOP;
 
     -- Arroz con Pollo sudado
     SELECT id INTO receta_id FROM public.receta WHERE nombre = 'Arroz con Pollo sudado';
     FOR ingrediente_id IN 
-        SELECT id FROM public.ingrediente WHERE nombre IN ('Arroz', 'Pollo', 'Tomate', 'Cebolla', 'Limón') 
+        SELECT id FROM public.ingrediente WHERE nombre IN ('Arroz', 'Pollo', 'Tomate', 'Cebolla', 'Limon') 
     LOOP
         INSERT INTO public.receta_ingrediente (recetaId, ingredienteId,cantidad) VALUES (receta_id, ingrediente_id,1);
     END LOOP;
@@ -117,7 +118,7 @@ BEGIN
     FOR ingrediente_id IN 
         SELECT id FROM public.ingrediente WHERE nombre IN ('Carne', 'Lechuga', 'Tomate', 'Cebolla', 'Queso', 'Ketchup') 
     LOOP
-        INSERT INTO public.receta_ingrediente (recetaId, ingredienteId,cantidad) VALUES (receta_id, ingrediente_id,1);
+        INSERT INTO public.receta_ingrediente (recetaid, ingredienteid,cantidad) VALUES (receta_id, ingrediente_id,1);
     END LOOP;
 
     -- Puré de Papa mix
@@ -125,13 +126,13 @@ BEGIN
     FOR ingrediente_id IN 
         SELECT id FROM public.ingrediente WHERE nombre IN ('Papa', 'Queso', 'Pollo', 'Carne', 'Cebolla') 
     LOOP
-        INSERT INTO public.receta_ingrediente (recetaId, ingredienteId,cantidad) VALUES (receta_id, ingrediente_id,1);
+        INSERT INTO public.receta_ingrediente (recetaid, ingredienteid,cantidad) VALUES (receta_id, ingrediente_id,1);
     END LOOP;
 
     -- Pollo a la Parrilla con Arroz y Limón
     SELECT id INTO receta_id FROM public.receta WHERE nombre = 'Pollo a la Parrilla con Arroz y Limón';
     FOR ingrediente_id IN 
-        SELECT id FROM public.ingrediente WHERE nombre IN ('Pollo', 'Arroz', 'Limón') 
+        SELECT id FROM public.ingrediente WHERE nombre IN ('Pollo', 'Arroz', 'Limon') 
     LOOP
         INSERT INTO public.receta_ingrediente (recetaId, ingredienteId,cantidad) VALUES (receta_id, ingrediente_id,1);
     END LOOP;

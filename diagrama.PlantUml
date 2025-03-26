@@ -1,0 +1,43 @@
+@startuml
+package "Frontend" {
+    [Vue.js (Frontend)]
+    [Nginx]
+}
+
+package "Backend" {
+    [Orchestrator Service]
+    [Kitchen Management Service]
+    [Logistics & Inventory Service]
+}
+
+package "Messaging" {
+    [RabbitMQ]
+}
+
+package "Database" {
+    [PostgreSQL]
+}
+
+package "External" {
+    [API Plaza Mercado]
+}
+
+' Relaciones
+[Vue.js (Frontend)] --> [Nginx] : REST API
+[Nginx] --> [Orchestrator Service] : Proxy API
+[Orchestrator Service] --> [Vue.js (Frontend)] : WebSockets actualiza en tiempo real el progreso de preparacion del plato
+[Orchestrator Service] --> [RabbitMQ] :envía orden a cocina
+
+[RabbitMQ] --> [Kitchen Management Service] : consume orden nueva
+
+[Kitchen Management Service] --> [Logistics & Inventory Service] : Updates Stock
+[Logistics & Inventory Service] --> [API Plaza Mercado] : Requests Purchases
+[Logistics & Inventory Service] -->[RabbitMQ] : evento actualiza stock
+[RabbitMQ] --> [Kitchen Management Service]: consume evento actualiza stock y reanuda orden
+
+[Logistics & Inventory Service] --> [PostgreSQL] : Stores Data
+[Kitchen Management Service] --> [PostgreSQL] : Stores Orders
+
+
+[Kitchen Management Service]-->[RabbitMQ] : evento actualiza estado orden
+@enduml

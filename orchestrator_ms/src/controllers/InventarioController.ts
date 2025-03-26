@@ -1,6 +1,6 @@
 
 
-import { Get } from "../utils/httputils/routing/RouteDecorators";
+import { Get, Post } from "../utils/httputils/routing/RouteDecorators";
 import { IncomingMessage, ServerResponse } from "http";
 import { manejarError } from "./error/ErrorHandler";
 import { Wrapper } from './dto/CrudDto';

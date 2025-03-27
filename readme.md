@@ -126,9 +126,13 @@ EL servicio de Nginx se encargará de servir la interfaz gráfica en el puerto 8
 
 ## Mejoras Futuras
 
-- UI: Terminar la interfaz gráfica y agregar más funcionalidades.
+- UI: Añadir notificaciones de error.
+- Mejorar la barra de progreso a una más detallada donde se muestre el paso de un pedido através de los distintos microservicios que atienden la    solicitud: en recepción, en la cocina, realizando compra de ingredientes, en tiempo real.
 
 ---
+
+
+
 
 ### Estado de Desarrollo
 

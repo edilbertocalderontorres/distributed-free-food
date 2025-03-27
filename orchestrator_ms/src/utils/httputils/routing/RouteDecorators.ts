@@ -39,7 +39,6 @@ export function createMethodDecorator(method: string) {
   };
 }
 
-// Métodos HTTP mejorados
 export const Get = createMethodDecorator("GET");
 export const Post = createMethodDecorator("POST");
 export const Put = createMethodDecorator("PUT");

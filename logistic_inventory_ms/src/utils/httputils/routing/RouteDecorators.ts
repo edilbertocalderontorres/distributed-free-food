@@ -13,7 +13,7 @@ import { RouteRegistry } from "./RouteRegistry";
 
 
 /**
- * Decorador de método para definir una ruta GET en un controlador.
+ * Decorador de método para definir una ruta  en un controlador.
  *  @param path - el path URL para la ruta.
  * 
  * descriptor.value es la función que se ejecutará cuando se haga una solicitud a la ruta.
@@ -39,7 +39,7 @@ export function createMethodDecorator(method: string) {
   };
 }
 
-// Métodos HTTP mejorados
+
 export const Get = createMethodDecorator("GET");
 export const Post = createMethodDecorator("POST");
 export const Put = createMethodDecorator("PUT");

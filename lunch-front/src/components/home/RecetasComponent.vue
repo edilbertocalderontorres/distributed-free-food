@@ -38,7 +38,7 @@ import { obtenerRecetas } from '@/services/EndpointService'
 const recetas = ref<RecetaAgrupada[]>()
 
 onMounted(async () => {
-  // Simula la carga desde una API
+
   const response: { recetas: RecetaAgrupada[] } = await obtenerRecetas()
   recetas.value = response.recetas
 })

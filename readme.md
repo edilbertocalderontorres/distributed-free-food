@@ -27,27 +27,27 @@ El sistema está compuesto por los siguientes microservicios:
 
 - Recibe las solicitudes de nuevos pedidos desde la UI.
 - Gestiona el flujo de eventos y estados de los pedidos.
-- Se comunica con **Cooking** para procesar la preparación de los platos.
-- Emite eventos **WebSocket** para actualizar la UI en tiempo real.
+- Se comunica con **kitchen_manage** para procesar la preparación de los platos.
+- Emite eventos **WebSocket** para actualizar la UI en tiempo real del estado de la ultima orden.
 
 ### 2. **kitchen_manage_ms**
 
 - Selecciona recetas aleatoriamente y solicita ingredientes.
 - Valida stock y solicita compras si es necesario.
 - Maneja tiempos de preparación de platos simulando tiempos reales.
-- Publica eventos sobre el estado de los pedidos.
+- Publica eventos sobre el estado de los pedidos a orchestrator.
 
 ### 3. **logistic_inventory_ms**
 
-- Gestiona los ingredientes y su disponibilidad en bodega.
-- Registra compras de ingredientes desde la API de la plaza de mercado.
-- Emite eventos sobre el estado de las compras para que se reanuden las ordenes pendientes.
+- Gestiona la compra de ingredientes por solicitud de **kitchen_manage**.
+- Realiza compras de ingredientes usando la API de la plaza de mercado.
+- Emite eventos sobre el estado de las compras para que se reanuden las ordenes pendientes y se finalicen.
 
 ### 4. **Frontend**
 
 - Interfaz gráfica en **Vue.js** servida con **Nginx**.
 - Se conecta por WebSockets a **Orchestator** para recibir actualizaciones en tiempo real sobre los pedidos.
-- Muestra el estado de los pedidos, ingredientes y recetas.
+- Muestra el estado de los pedidos, ingredientes y recetas mediante servicios rest expuestos para tal fin.
 
 ## Comunicación entre Microservicios
 
@@ -83,7 +83,7 @@ docker-compose up --build  -d
 ```
 
 Esto iniciará todos los servicios necesarios dentro de una red de docker,
-junto con sus respectivas configuraciones de arranque para colas y exchanges RabbitMQ y PostgreSQL(modelo de datos y sus inserts base).
+junto con sus respectivas configuraciones de arranque para colas y exchanges RabbitMQ y PostgreSQL(modelo de datos y sus inserts iniciales para ingredientes y recetas).
 
 EL servicio de Nginx se encargará de servir la interfaz gráfica en el puerto 80. Para acceder a la interfaz, abrir un navegador y dirigirse a `http://localhost`.
 
@@ -127,7 +127,7 @@ EL servicio de Nginx se encargará de servir la interfaz gráfica en el puerto 8
 ## Mejoras Futuras
 
 - UI: Añadir notificaciones de error.
-- Mejorar la barra de progreso a una más detallada donde se muestre el paso de un pedido através de los distintos microservicios que atienden la    solicitud: en recepción, en la cocina, realizando compra de ingredientes, en tiempo real.
+- Mejorar la barra de progreso a una más detallada donde se muestre el paso de un pedido através de los distintos microservicios que atienden la    solicitud: en recepción, en la cocina, realizando compra de ingredientes... en tiempo real.
 
 ---
 

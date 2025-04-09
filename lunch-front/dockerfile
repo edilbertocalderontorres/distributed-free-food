@@ -4,6 +4,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install
 COPY . .
+RUN cat vite.config.js
 RUN npm run build
 
 # Usa Nginx para servir la app compilada

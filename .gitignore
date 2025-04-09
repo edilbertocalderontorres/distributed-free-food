@@ -9,8 +9,8 @@
 **/*.d.ts
 
 # Ignorar archivos específicos de Vue
-**/.vite/
-**/vite.config.ts
+#**/.vite/
+#**/vite.config.ts
 **/.nuxt/
 **/.output/
 

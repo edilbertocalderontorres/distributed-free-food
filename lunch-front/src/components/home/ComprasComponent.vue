@@ -27,6 +27,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { obtenerHistorialCompras } from '@/services/EndpointService'
+import type { Compra } from '@/services/models'
 
 // Estado de compras
 const compras = ref<
@@ -46,8 +47,11 @@ onMounted(async () => {
 })
 
 async function cargarCompras() {
-  const response = await obtenerHistorialCompras({ paginacion: paginacion.value })
-  compras.value = response.compras
+  const response: Response = await obtenerHistorialCompras({ paginacion: paginacion.value })
+  if (response.status === 200) {
+    let res: { compras: Compra[] } = await response.json()
+    compras.value = res.compras
+  }
 }
 // Asignar iconos a ingredientes
 function obtenerIcono(ingrediente: string): string {
@@ -78,7 +82,8 @@ function formatearFecha(fecha: string) {
 
 <style scoped>
 .compras-container {
-  max-width: 100%;
+  max-width: 60%;
+  margin: auto;
   padding: 1rem;
   background: var(--color-background-soft);
   border-radius: 12px;
@@ -88,9 +93,11 @@ function formatearFecha(fecha: string) {
 
 /* Scroll vertical */
 .scroll-box {
-  max-height: 250px;
+  max-height: 400px;
   overflow-y: auto;
   padding-right: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
 }
 
 .compra-item {

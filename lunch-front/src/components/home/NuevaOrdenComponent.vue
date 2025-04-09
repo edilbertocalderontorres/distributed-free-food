@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import BarComponent from '@/components/home/BarComponent.vue'
-import type { EventoEstado, Orden } from '@/stores/models'
-import type { WsEventMessage } from '@/stores/models'
+import type { EventoEstado, Orden } from '@/services/models'
 import { crearOrden } from '@/services/EndpointService'
+
+import { useAlertStore } from '@/stores/AlertStores'
+
+const alertStore = useAlertStore()
 
 const tipoDocumento = ref('')
 const numDocumento = ref('')
@@ -49,6 +52,7 @@ socket.onclose = () => {
 
 function reconnect() {
   console.log('Intentando reconectar...')
+
   socket = new WebSocket(`${WS_URL}${userid}`)
 }
 
@@ -63,9 +67,25 @@ async function enviarOrden() {
   loading.value = true
 
   try {
-    const response = await crearOrden(tipoDocumento.value, numDocumento.value)
-    mensaje.value = response.mensaje
-  } catch (err) {
+    const response: Response = await crearOrden(tipoDocumento.value, numDocumento.value)
+
+    if (response.status !== 200) {
+      let ob: { error: string; mensaje: string } = await response.json()
+      mensaje.value = ob.mensaje
+      error.value = true
+      console.log(ob)
+      alertStore.mostrarAlert(ob.mensaje, ob.error, 'error')
+      return
+    } else {
+      let res = await response.json()
+      alertStore.mostrarAlert(res.mensaje, '', 'success')
+      tipoDocumento.value = ''
+      numDocumento.value = ''
+    }
+
+    //mensaje.value = response.mensaje
+    //
+  } catch (err: unknown) {
   } finally {
     loading.value = false
   }
@@ -77,7 +97,7 @@ async function enviarOrden() {
 
     <!-- Formulario de Nueva Orden -->
     <form @submit.prevent="enviarOrden" class="form">
-      <select  v-model="tipoDocumento" placeholder="Tipo de Documento" required class="input" >
+      <select v-model="tipoDocumento" placeholder="Tipo de Documento" required class="input">
         <option value="">Tipo de Documento</option>
         <option value="CC">Cédula de Ciudadanía</option>
         <option value="CE">Cédula de Extranjería</option>

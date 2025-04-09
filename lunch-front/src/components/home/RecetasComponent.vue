@@ -31,14 +31,13 @@
 </template>
 
 <script setup lang="ts">
-import type { RecetaAgrupada } from '@/stores/models'
+import type { RecetaAgrupada } from '@/services/models'
 import { ref, onMounted } from 'vue'
 import { obtenerRecetas } from '@/services/EndpointService'
 
 const recetas = ref<RecetaAgrupada[]>()
 
 onMounted(async () => {
-
   const response: { recetas: RecetaAgrupada[] } = await obtenerRecetas()
   recetas.value = response.recetas
 })
@@ -63,9 +62,15 @@ function obtenerIcono(ingrediente: string): string {
 
 <style scoped>
 .recetas-container {
-  max-width: 100%;
+  max-width: 60%;
+  margin: auto;
   padding: 1rem;
   overflow-x: hidden;
+  background: var(--color-background-soft);
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--color-border);
+  text-align: center;
 }
 
 /* Scroll vertical */

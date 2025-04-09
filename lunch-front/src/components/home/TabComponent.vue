@@ -25,10 +25,11 @@ import InventarioComponent from './InventarioComponent.vue'
 import ComprasComponent from './ComprasComponent.vue'
 import RecetasComponent from './RecetasComponent.vue'
 
-const tabs = ['Nueva Orden', 'Órdenes', 'Inventario', 'Compras', 'Recetas']
-const activeTab = ref('Nueva Orden')
+const tabs = ['Nueva Orden', 'Órdenes', 'Inventario', 'Compras', 'Recetas'] as const
+type TabKey = typeof tabs[number]
+const activeTab = ref<TabKey>('Nueva Orden')
 
-const components = {
+const components: Record<TabKey, any> = {
   'Nueva Orden': NuevaOrdenComponent,
   Órdenes: OrdenesComponent,
   Inventario: InventarioComponent,

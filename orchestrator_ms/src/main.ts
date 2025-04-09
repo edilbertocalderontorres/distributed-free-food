@@ -6,18 +6,13 @@ import { WebSocketManager } from "./events/ws/WebSocketManager";
 import dotenv from 'dotenv';
 import { cachedSecurityFilterGateway } from "./security/ApiGatewayConfigCahed";
 dotenv.config();
-const server =  createServer(async (req: IncomingMessage, res: ServerResponse) => {
+const server = createServer(async (req: IncomingMessage, res: ServerResponse) => {
 
   //api gateway
-  const cacheIsActive:boolean = process.env.CACHE_ACTIVE as unknown as boolean ;
-  if (cacheIsActive) {
 
-    await cachedSecurityFilterGateway(req, res);
-    return;
-  }
   securityFilterGateway(req, res);
-  
-  return;
+
+
 
 });
 
@@ -32,7 +27,7 @@ server.listen(PORT, () => {
 
 process.on('SIGTERM', async () => {
   console.log('SIGTERM received. Closing server and Redis connection...');
-  
+
   server.close(() => {
     console.log('Server closed');
     process.exit(0);

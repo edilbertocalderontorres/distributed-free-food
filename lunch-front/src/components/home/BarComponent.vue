@@ -1,4 +1,5 @@
 <script setup>
+
 const props = defineProps({
   porcentaje: Number,
 })

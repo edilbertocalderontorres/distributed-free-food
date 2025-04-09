@@ -7,13 +7,9 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 # Forzamos instalación limpia
-RUN npm ci --loglevel verbose
-
+RUN npm ci
 # Ahora sí copiamos el resto del proyecto
 COPY . .
-
-# Verificamos que vite.config.(ts|js) está presente
-RUN ls -la vite.config.*
 
 # Forzamos que vue plugin esté instalado y vite funcione
 RUN npx vite --version && npx vue-tsc --version

@@ -44,7 +44,7 @@ services:
   orchestrator:
     build: ./orchestrator_ms
     ports:
-      - "8080:8080"
+      - "8080"
     container_name: orchestrator_ms
     environment:
       <<: *global-env
@@ -91,7 +91,7 @@ services:
       POSTGRES_PASSWORD: app_password
       POSTGRES_DB: almuerzos_db
     ports:
-      - "5432:5432"
+      - "5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -102,8 +102,8 @@ services:
     image: rabbitmq:management
     container_name: rabbitmq
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - "5672"
+      - "15672"
     volumes:
       - ./definitions.json:/etc/rabbitmq/definitions.json:ro
       - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro

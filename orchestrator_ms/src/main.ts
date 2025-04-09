@@ -26,7 +26,7 @@ server.listen(PORT, () => {
 });
 
 process.on('SIGTERM', async () => {
-  console.log('SIGTERM received. Closing server and Redis connection...');
+ 
 
   server.close(() => {
     console.log('Server closed');

@@ -1,6 +1,6 @@
 <template>
   <div class="inventario-container">
-    <h2 class="text-2xl font-bold text-white-800 mb-4">📦 Inventario de Bodega</h2>
+    <h2 class="text-2xl font-bold text-white-800 mb-4 pb-4">📦 Inventario de Bodega</h2>
 
     <div class="scroll-box">
       <ul>
@@ -22,9 +22,13 @@ import { obtenerStockBodega } from '@/services/EndpointService'
 const inventario = ref<{ nombre: string; cantidaddisponible: number }[]>([])
 
 onMounted(async () => {
-  const response: { inventario: { nombre: string; cantidaddisponible: number }[] } =
-    await obtenerStockBodega()
-  inventario.value = response.inventario
+  const response: Response = await obtenerStockBodega()
+
+  if (response.status === 200) {
+    let res: { inventario: { nombre: string; cantidaddisponible: number }[] } =
+      await response.json()
+    inventario.value = res.inventario
+  }
 })
 
 // Asignar iconos a ingredientes
@@ -47,7 +51,8 @@ function obtenerIcono(ingrediente: string): string {
 
 <style scoped>
 .inventario-container {
-  max-width: 100%;
+  max-width: 60%;
+  margin: auto;
   padding: 1rem;
   background: var(--color-background-soft);
   border-radius: 12px;
@@ -57,9 +62,11 @@ function obtenerIcono(ingrediente: string): string {
 
 /* Scroll vertical */
 .scroll-box {
-  max-height: 300px;
+  max-height: 400px;
   overflow-y: auto;
   padding-right: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
 }
 
 .inventario-item {

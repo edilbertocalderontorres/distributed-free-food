@@ -32,7 +32,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { obtenerHistorialOrdenes } from '@/services/EndpointService'
-import type { Orden } from '@/stores/models'
+import type { Orden } from '@/services/models'
 
 // Estado de las órdenes y paginación
 const ordenes = ref<Orden[]>()
@@ -43,8 +43,10 @@ onMounted(() => cargarOrdenes())
 // Función para cargar órdenes con paginación
 async function cargarOrdenes() {
   const requestBody = { data: '', paginacion: paginacion.value }
-  const response: { ordenes: Orden[] } = await obtenerHistorialOrdenes(requestBody)
-  ordenes.value = response.ordenes
+  const response: Response = await obtenerHistorialOrdenes(requestBody)
+
+  let res: { ordenes: Orden[] } = await response.json()
+  ordenes.value = res.ordenes
 }
 
 // Función para cambiar de página
@@ -71,9 +73,15 @@ function formatearFecha(fecha: string) {
 
 <style scoped>
 .ordenes-container {
-  max-width: 100%;
+  max-width: 60%;
+  margin: auto;
   padding: 1rem;
   overflow-x: hidden;
+  background: var(--color-background-soft);
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--color-border);
+  text-align: center;
 }
 
 /* Scroll vertical */

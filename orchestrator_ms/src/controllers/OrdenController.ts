@@ -31,7 +31,6 @@ export class OrdenController {
             try {
                 container = JSON.parse(body);
 
-                console.log("Por acá también");
 
                 orden = {
                     id: "",

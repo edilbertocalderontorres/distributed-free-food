@@ -29,6 +29,13 @@ export interface Orden {
   fechaactualizacion: string;
 }
 
+export interface Compra {
+  nombre: string
+  ingredienteid: string
+  cantidadcomprada: number
+  fechacompra: string
+  id: string
+}
 export interface EventoEstado {
   clientid: string;
   orden: Orden;

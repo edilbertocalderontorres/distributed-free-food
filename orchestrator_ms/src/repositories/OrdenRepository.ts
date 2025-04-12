@@ -14,10 +14,10 @@ export class OrdenRepository extends BaseRepository<Orden> {
       data.beneficiarioid,
       data.recetaid,
       data.estado
-     
+
     ];
 
-  
+
     const result = await query(
       `INSERT INTO public.orden (beneficiarioid, recetaid, estado, fechacreacion, fechaactualizacion)
     VALUES ($1, $2, $3, NOW(), NOW())
@@ -34,10 +34,14 @@ export class OrdenRepository extends BaseRepository<Orden> {
 
   async getHistorialPedidos(page: number, limit: number): Promise<any[]> {
     const offset = (page - 1) * limit;
-    const result = await query(`SELECT r.nombre , o.* FROM ${this.tabla} o 
-      INNER JOIN receta r ON r.id = o.recetaid
+    const result = await query(`SELECT CASE 
+        WHEN o.recetanombre IS NULL THEN 'Receta en espera de asignación'
+        ELSE r.nombre
+    END AS recetanombre, o.id, o.beneficiarioid, o.estado, o.fechacreacion, o.fechaactualizacion
+        FROM ${this.tabla} o 
+      LEFT JOIN receta r ON r.id = o.recetaid
       ORDER BY o.fechaactualizacion DESC LIMIT $1 OFFSET $2`, [limit, offset]);
-    return result.rows as { nombre: string, orden: Orden }[];
+    return result.rows as { orden: Orden }[];
   }
 
 }

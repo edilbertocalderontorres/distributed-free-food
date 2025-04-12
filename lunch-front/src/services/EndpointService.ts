@@ -1,4 +1,4 @@
-import type { RecetaAgrupada } from "@/stores/models";
+import type { RecetaAgrupada } from "@/services/models";
 import { apiFetch } from "./ApiServiceBase";
 
 export async function crearOrden(tipoDocumento: string, numDocumento: string) {
@@ -19,10 +19,11 @@ export async function obtenerStockBodega() {
 }
 
 
-export async function obtenerHistorialCompras(data:any) {
+export async function obtenerHistorialCompras(data: any) {
   return apiFetch("/compras/historial", { method: "POST", body: JSON.stringify(data) });
 }
 
 export async function obtenerRecetas(): Promise<{ recetas: RecetaAgrupada[] }> {
-  return apiFetch("/recetas");
+  const response = await apiFetch("/recetas");
+  return response.json() as Promise<{ recetas: RecetaAgrupada[] }>;
 }

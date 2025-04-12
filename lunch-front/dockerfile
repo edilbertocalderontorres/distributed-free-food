@@ -1,10 +1,22 @@
 # Usa Node para construir la app
+# Usa Node para construir la app
 FROM node:22-alpine as build-stage
 WORKDIR /app
+
+# Copiamos primero los archivos de dependencias
 COPY package.json package-lock.json ./
-RUN npm install
+
+# Forzamos instalación limpia
+RUN npm ci
+# Ahora sí copiamos el resto del proyecto
 COPY . .
+
+# Forzamos que vue plugin esté instalado y vite funcione
+RUN npx vite --version && npx vue-tsc --version
+
+# Compilamos
 RUN npm run build
+
 
 # Usa Nginx para servir la app compilada
 FROM nginx:alpine

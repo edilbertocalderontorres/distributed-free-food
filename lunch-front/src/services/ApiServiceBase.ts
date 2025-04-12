@@ -10,8 +10,6 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
     },
   });
 
-  if (!response.ok) {
-    throw new Error(`Error en ${endpoint}: ${response.statusText}`);
-  }
-  return response.json();
+
+  return response;
 }

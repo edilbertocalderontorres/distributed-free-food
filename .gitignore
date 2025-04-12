@@ -9,7 +9,7 @@
 **/*.d.ts
 
 # Ignorar archivos específicos de Vue
-**/.vite/
+#**/.vite/
 **/vite.config.ts
 **/.nuxt/
 **/.output/
@@ -25,6 +25,7 @@
 # Ignorar entornos y configuraciones sensibles
 **/.env
 **/.env.*
+
 
 # Ignorar logs
 **/npm-debug.log

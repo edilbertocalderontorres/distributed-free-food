@@ -9,7 +9,7 @@ export class CompraController {
     @Post("/compras/historial")
     public async obtenerHistorialCompras(req: IncomingMessage, res: ServerResponse): Promise<void> {
 
-        
+
         let body = "";
         let jsonBody: Wrapper;
         req.on("data", (chunk) => {
@@ -24,7 +24,7 @@ export class CompraController {
             try {
                 const compras = await obtenerHistorialCompras(jsonBody.paginacion);
 
-                console.log(compras);
+
 
                 res.writeHead(200, { "Content-Type": "application/json" });
                 res.end(JSON.stringify(compras));

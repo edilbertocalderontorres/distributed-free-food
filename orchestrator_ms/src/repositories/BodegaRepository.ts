@@ -1,5 +1,5 @@
 import { BaseRepository } from "./Base";
-import { ItemBodega, UUID } from '../models/models';
+import { InventarioItem, ItemBodega, UUID } from '../models/models';
 import { query } from "../config/PostgresConfig";
 import format from "pg-format"
 
@@ -45,9 +45,9 @@ export class BodegaRepository extends BaseRepository<ItemBodega> {
         return result.rows[0] as ItemBodega;
     }
 
-    async obtenerInventario(): Promise<{nombre:string, cantidaddisponible:number}[]> {
+    async obtenerInventario(): Promise<InventarioItem[]> {
         const result = await query(`SELECT i.nombre, b.cantidaddisponible FROM public.${this.tabla} b inner join public.ingrediente i on b.ingredienteid = i.id`);
-        return result.rows as {nombre:string, cantidaddisponible:number}[];
+        return result.rows as InventarioItem[];
     }
 
 }

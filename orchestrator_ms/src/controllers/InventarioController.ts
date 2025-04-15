@@ -14,7 +14,7 @@ export class InventarioController {
 
     
         @Get("/bodega/inventario")
-        public async obtenerInventario(req: IncomingMessage, res: ServerResponse): Promise<void> {
+        public  obtenerInventario(req: IncomingMessage, res: ServerResponse): void {
             let body = "";
                     let jsonBody: Wrapper;
                     req.on("data", (chunk) => {

@@ -3,7 +3,7 @@
 import { RouteLinkType } from "./RouteType";
 
 /**
- * Clase que mantiene un registro de las rutas y sus controladores http en la aplicación.
+ * Clase que mantiene un registro de las rutas y sus controladores, métodos http y manejadores en la aplicación.
  */
 export class RouteRegistry {
     private static routes: RouteLinkType[] = [];

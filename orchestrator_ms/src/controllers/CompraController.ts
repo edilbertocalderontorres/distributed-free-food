@@ -4,10 +4,11 @@ import { manejarError } from "./error/ErrorHandler";
 import { obtenerHistorialCompras } from "../services/CrudService";
 import { json } from 'stream/consumers';
 import { Wrapper } from "./dto/CrudDto";
+import { ListaCompras } from "../models/models";
 
 export class CompraController {
     @Post("/compras/historial")
-    public async obtenerHistorialCompras(req: IncomingMessage, res: ServerResponse): Promise<void> {
+    public  obtenerHistorialCompras(req: IncomingMessage, res: ServerResponse):void {
 
 
         let body = "";
@@ -22,7 +23,7 @@ export class CompraController {
             jsonBody = await JSON.parse(body);
 
             try {
-                const compras = await obtenerHistorialCompras(jsonBody.paginacion);
+                const compras:ListaCompras = await obtenerHistorialCompras(jsonBody.paginacion);
 
 
 

@@ -8,12 +8,8 @@ import { cachedSecurityFilterGateway } from "./security/ApiGatewayConfigCahed";
 dotenv.config();
 const server = createServer(async (req: IncomingMessage, res: ServerResponse) => {
 
-  //api gateway
-
+  //securityFilter
   securityFilterGateway(req, res);
-
-
-
 });
 
 const PORT = 8080;

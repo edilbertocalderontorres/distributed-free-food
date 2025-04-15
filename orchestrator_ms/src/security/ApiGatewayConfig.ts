@@ -37,7 +37,7 @@ setInterval(() => {
   }
 }, RATE_LIMIT.WINDOW_MS);
 
-// Función para obtener la IP del cliente (considerando proxies)
+// Función para obtener la IP del cliente
 function getClientIp(req: http.IncomingMessage): string {
   const xForwardedFor = req.headers['x-forwarded-for'];
   return (typeof xForwardedFor === 'string' 
@@ -45,7 +45,7 @@ function getClientIp(req: http.IncomingMessage): string {
     : req.socket.remoteAddress) || 'unknown';
 }
 
-// Crear el servidor HTTP
+
 export function securityFilterGateway(req: ClientRequest, res: http.ServerResponse):void  {
   const clientIp = getClientIp(req);
   const currentTime = Date.now();
@@ -85,8 +85,6 @@ export function securityFilterGateway(req: ClientRequest, res: http.ServerRespon
   // Parsear la URL
   req.parsedUrl = url.parse(req.url || '', true);
 
-
-console.log(requestCounts);
   
   // Manejar la petición normalmente si no se ha excedido el límite
  // Configuración de CORS
@@ -100,7 +98,7 @@ console.log(requestCounts);
     return;
   }
   const routeLink = RouteRegistry.getRoutes().find(
-    (r) => r.method === req.method && r.path === req.url
+    (route) => route.method === req.method && route.path === req.url
   );
 
   if (routeLink) {

@@ -51,7 +51,7 @@ export type EstadoOrden = "PENDIENTE" | "EN PREPARACION" | "FINALIZADA";
 export interface Orden {
   id: UUID;
   beneficiarioid: string;
-  recetanombre: string|null;
+  recetanombre: string | null;
   recetaid: UUID | null;
   estado: EstadoOrden;
   fechacreacion: Date;
@@ -79,3 +79,17 @@ export interface Paginacion {
   page: number;
   limit: number;
 }
+
+export interface ListaCompras {
+
+  compras: ItemListaCompras[];
+}
+
+export interface ItemListaCompras {
+  nombre: string, ingredienteid: string, cantidadcomprada: number, fechacompra: string, id: string
+}
+
+
+export interface Inventario { inventario: InventarioItem[] }
+
+export interface InventarioItem { nombre: string, cantidaddisponible: number }

@@ -4,7 +4,7 @@ import { CompraRepository } from "../repositories/CompraRepository";
 import { RecetaRepository } from "../repositories/RecetaRepository";
 import { BodegaRepository } from "../repositories/BodegaRepository";
 import dotenv from 'dotenv';
-import { Orden, Ingrediente, Compra, Receta, Paginacion, RecetaIngrediente, RecetaAgrupada } from '../models/models';
+import { Orden, Ingrediente, Compra, Receta, Paginacion, RecetaIngrediente, RecetaAgrupada, ListaCompras, ItemListaCompras, Inventario } from '../models/models';
 
 
 
@@ -16,24 +16,24 @@ export async function obtenerEstadoOrdenes(): Promise<Orden[]> {
     return await repository.getHistorialPedidos(1, 50);
 }
 
-export async function obtenerHistorialPedidos(paginacion: Paginacion): Promise<{ordenes:{ nombre: string, orden: Orden }[]}> {
+export async function obtenerHistorialPedidos(paginacion: Paginacion): Promise<{ ordenes: { nombre: string, orden: Orden }[] }> {
     const repository = new OrdenRepository();
 
     let ordenes = await repository.getHistorialPedidos(paginacion.page, paginacion.limit)
-    return{ ordenes};
+    return { ordenes };
 }
 
-export async function obtenerInventario(): Promise<{inventario:{nombre: string, cantidaddisponible: number}[]}> {
+export async function obtenerInventario(): Promise<Inventario> {
     const repository = new BodegaRepository();
-    let inventario=await repository.obtenerInventario()
-    return {inventario};
+    let inventario = await repository.obtenerInventario()
+    return { inventario };
 }
 
-export async function obtenerHistorialCompras(paginacion: Paginacion): Promise<{compras:{nombre:string,ingredienteid:string, cantidadcomprada:number,fechacompra:string, id:string}[]}> {
+export async function obtenerHistorialCompras(paginacion: Paginacion): Promise<ListaCompras> {
     const repository = new CompraRepository();
-    let compras = await repository.getHistorialCompras(paginacion.page, paginacion.limit);
-    return {compras};
-    
+    let compras: ItemListaCompras[] = await repository.getHistorialCompras(paginacion.page, paginacion.limit);
+    return { compras };
+
 }
 
 export async function obtenerRecetas(): Promise<any> {
